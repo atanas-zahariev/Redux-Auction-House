@@ -8,9 +8,14 @@ const userAdapter = createEntityAdapter();
 
 export const loginUser = createAsyncThunk(
     'user/login',
-    async (data) => {
-        const result = await login(data);
-        return result;
+    async (data, { rejectWithValue }) => {
+        try {
+            const result = await login(data);
+            return result;
+        } catch (error) {
+            
+            return rejectWithValue(error);
+        }
     }
 );
 
@@ -31,23 +36,32 @@ const initialState = userAdapter.getInitialState({
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reduser: {},
+    reducers: {
+        cleanError(state,action){
+            state.error = null;
+        }
+    },
 
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.persistedState = getUser()
+                state.persistedState = getUser();
                 const { _id: id, email, firstname, lastname, __v } = action.payload;
                 // state.entities[_id] = action.payload;
                 // state.ids.push(_id);
-                userAdapter.addOne(state, { id, email, firstname, lastname, __v })
+                userAdapter.addOne(state, { id, email, firstname, lastname, __v });
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.status = 'faild';
+                console.log(action.payload);
+                state.error = action.payload;
             })
             .addCase(logoutUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.persistedState = null;
                 if (action.payload) {
-                    userAdapter.removeOne(state, action.payload)
+                    userAdapter.removeOne(state, action.payload);
                 }
             });
     }
@@ -56,8 +70,11 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
+export const {cleanError} = userSlice.actions;
+
 export const selectUser = state => state.user;
 
 export const selectPersistedState = state => state.user.persistedState;
 
+export const selectError = state => state.user.error;
 

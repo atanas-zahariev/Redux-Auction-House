@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,5 +24,6 @@ export default function Logout() {
         
         fetchData();
         navigate('/');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 }

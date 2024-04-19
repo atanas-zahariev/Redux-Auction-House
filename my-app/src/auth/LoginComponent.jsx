@@ -1,21 +1,26 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
-import { formHandller} from '../services/utility';
-import { loginUser } from '../slices/authSlice';
+import { formHandller } from '../services/utility';
+import { cleanError, loginUser, selectError, selectUser } from '../slices/authSlice';
 
 export default function Login() {
+    const state = useSelector(selectUser);
+    const error = useSelector(selectError);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const userLogin = async (data) => {
-        try {
-            await dispatch(loginUser(data));
+        const result = await dispatch(loginUser(data));
+        if (result.error) {
+            return;
+        } else {
+            if(error){
+                dispatch(cleanError(state));
+            }
             navigate('/');
-        } catch (error) {
-            console.log(error);
         }
     };
 

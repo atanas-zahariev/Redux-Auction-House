@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../services/dataService';
-import { setUserData } from '../services/utility';
+import { getUser, setUserData } from '../services/utility';
 
 const { login, register, logout } = api();
 
@@ -17,35 +17,38 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     'user/logout',
     async (id) => {
-        const result = await logout();
+        await logout();
         return id;
     }
 );
 
 const initialState = userAdapter.getInitialState({
     status: 'idle',
-    error: null
+    error: null,
+    persistedState: getUser()
 });
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reduser: {
+    reduser: {},
 
-    },
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                const { _id } = action.payload;
-                state.entities[_id] = action.payload;
-                state.ids.push(_id);
+                state.persistedState = getUser()
+                const { _id: id, email, firstname, lastname, __v } = action.payload;
+                // state.entities[_id] = action.payload;
+                // state.ids.push(_id);
+                userAdapter.addOne(state, { id, email, firstname, lastname, __v })
             })
             .addCase(logoutUser.fulfilled, (state, action) => {
-                console.log(action.payload);
-                delete state.entities[action.payload];
-                const index = state.ids.indexOf(action.payload);
-                state.ids.splice(index, 1);
+                state.status = 'succeeded';
+                state.persistedState = null;
+                if (action.payload) {
+                    userAdapter.removeOne(state, action.payload)
+                }
             });
     }
 });
@@ -54,5 +57,7 @@ const userSlice = createSlice({
 export default userSlice.reducer;
 
 export const selectUser = state => state.user;
+
+export const selectPersistedState = state => state.user.persistedState;
 
 

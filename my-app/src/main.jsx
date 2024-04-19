@@ -1,12 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { Provider} from 'react-redux';
+import { Provider } from 'react-redux';
+
+import { BrowserRouter } from 'react-router-dom';
+
 import App from './App';
 
 import './index.css';
 
-import { BrowserRouter } from 'react-router-dom';
 import { store } from './app/store';
 
 const container = document.getElementById('root');

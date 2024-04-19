@@ -1,16 +1,11 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../slices/authSlice';
+import { selectPersistedState } from '../../slices/authSlice';
 
 export default function Header() {
-    // const { state } = useContext(AuthContext);
-    const user = useSelector(selectUser);
-    const state = Object.entries(user.entities).length;
-
-    console.log(state);
+    const state = useSelector(selectPersistedState);
     return (
         <header>
             <Link to="/" className="title-logo">
@@ -18,8 +13,6 @@ export default function Header() {
                 <span>Auction House</span>
             </Link>
             <nav className="main-nav nav-mid">               
-
-                    {/* <!-- User actions --> */}
                     {state && (
                         <ul>
                             <li>
@@ -44,8 +37,6 @@ export default function Header() {
                             </li>
                         </ul>
                     )}
-
-                    {/* <!-- Guest actions --> */}
 
                     {!state && (
                         <ul>

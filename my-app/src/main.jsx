@@ -9,6 +9,9 @@ import App from './App';
 import './index.css';
 
 import { store } from './app/store';
+import { getItems } from './slices/itemsSlice';
+
+store.dispatch(getItems());
 
 const container = document.getElementById('root');
 

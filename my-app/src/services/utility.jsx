@@ -2,7 +2,7 @@ const item = 'user';
 
 export function getUser() {
     try {
-        return JSON.parse(localStorage.getItem(item));        
+        return JSON.parse(localStorage.getItem(item));
     } catch (error) {
         return undefined;
     }
@@ -21,9 +21,14 @@ export function formHandller(callback) {
         event.preventDefault();
         const myForm = new FormData(event.target);
         const data = Object.fromEntries(myForm.entries());
-        
-        callback(data,event);
+
+        callback(data, event);
     };
+}
+
+export function makeCorrectIdForRedux(item) {
+    const { _id: id, title, category, description, imgUrl, bider, owner, price, __v } = item;
+    return { id, title, category, description, imgUrl, bider, owner, price, __v };
 }
 
 
@@ -106,8 +111,8 @@ export const validator = (value) => {
         }
     }
 
-    if(oldPrice){
-        if(Number(price) <= Number(oldPrice)){
+    if (oldPrice) {
+        if (Number(price) <= Number(oldPrice)) {
             error = ['Your price should be higher see existing.'];
             throw error;
         }

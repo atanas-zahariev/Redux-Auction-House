@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export function Item({
-    _id,
+    id,
     imgUrl,
     title,
     price,
@@ -18,7 +18,7 @@ export function Item({
 
             <footer className="align-center pad-med">
                 <p>Current price: <strong>${price}</strong></p>
-                <Link to={`/details/${_id}`} className="action" >See details</Link>
+                <Link to={`/details/${id}`} className="action" >See details</Link>
             </footer>
         </li>
     );

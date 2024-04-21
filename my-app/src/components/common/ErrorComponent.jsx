@@ -1,12 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSelector } from 'react-redux';
-import { selectError } from '../../slices/authSlice';
+import { selectAuthError } from '../../slices/authSlice';
+import { selectItemsError } from '../../slices/itemsSlice';
 
 
 
 export default function Error() {
-    const error = useSelector(selectError);
-
+    const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
+    const error = itemsError || authError;
+    // console.log(error);
     if (Array.isArray(error)) {
         return (
             <div className="error-box">

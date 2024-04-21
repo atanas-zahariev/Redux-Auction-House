@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../services/dataService';
-import { validator } from '../services/utility';
+import { makeCorrectIdForRedux, validator } from '../services/utility';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem } = api();
+const { getAllDataInSystem, getSpecificDataWithId } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -33,16 +33,25 @@ const itemsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getItems.fulfilled, (state, action) => {
-                function makeCorrectIdForRedux(item) {
-                    const { _id: id, title, category, description, imgUrl, bider, owner, price, __v } = item;
-                    return { id, title, category, description, imgUrl, bider, owner, price, __v };
-                }
-
+                state.status = 'fetchItemsSucceeded';
                 itemsAdapter.addMany(state, action.payload.items.map(makeCorrectIdForRedux));
+            })
+            .addCase(getItems.rejected, (state, action) => {
+                state.status = 'fetchItemsFaild';
+
+                state.error = action.payload;
             });
+
     }
 });
 
 export default itemsSlice.reducer;
 
-export const selectItems = state => state.items.entities;
+export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapter.getSelectors(state => state.items);
+
+// export const getItemByUserId = createSelector(
+//     [selectItems, (state, userId) => userId],
+//     (items, userId) => items.filter((item) => item.id === userId)
+// );
+
+export const selectItemsError = state => state.items.error;

@@ -4,16 +4,16 @@ import { useNavigate } from 'react-router-dom';
 
 
 import { formHandller } from '../services/utility';
-import { cleanError, loginUser, selectError } from '../slices/authSlice';
+import { cleanAuthError, loginUser, selectAuthError } from '../slices/authSlice';
 import { useEffect } from 'react';
 
 export default function Login() {
-    const error = useSelector(selectError);
+    const error = useSelector(selectAuthError);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(cleanError());
+        dispatch(cleanAuthError());
       // eslint-disable-next-line react-hooks/exhaustive-deps
       },[]);
 
@@ -23,7 +23,7 @@ export default function Login() {
             return;
         } else {
             if (error) {
-                dispatch(cleanError());
+                dispatch(cleanAuthError());
             }
             navigate('/');
         }

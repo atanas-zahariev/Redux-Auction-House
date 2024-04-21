@@ -2,16 +2,16 @@ import { useNavigate } from 'react-router-dom';
 import { formHandller } from '../services/utility';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useDispatch, useSelector } from 'react-redux';
-import { cleanError, registerUser, selectError } from '../slices/authSlice';
+import { cleanAuthError, registerUser, selectAuthError } from '../slices/authSlice';
 import { useEffect } from 'react';
 
 export default function Register() {
   const dispatch = useDispatch();
-  const error = useSelector(selectError);
+  const error = useSelector(selectAuthError);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(cleanError());
+    dispatch(cleanAuthError());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -22,7 +22,7 @@ export default function Register() {
       return;
     } else {
       if (error) {
-        dispatch(cleanError());
+        dispatch(cleanAuthError());
       }
       navigate('/');
     }

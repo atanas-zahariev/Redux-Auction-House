@@ -7,6 +7,8 @@ import Logout from './auth/LogoutComponent';
 import Error from './components/common/ErrorComponent';
 import Register from './auth/RegisterComponent';
 import Catalog from './components/common/catalog/CatalogComponent';
+import Details from './components/common/details/DetailsComponent';
+
 
 
 
@@ -20,6 +22,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/catalog' element={<Catalog />} />
+          <Route path='/details/:id' element={<Details />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/register' element={<Register />} />

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../services/dataService';
-import { getUser} from '../services/utility';
+import { getUser, validator} from '../services/utility';
 
 const { login, register, logout } = api();
 
@@ -10,6 +10,7 @@ export const loginUser = createAsyncThunk(
     'user/login',
     async (data, { rejectWithValue }) => {
         try {
+            validator(data);
             const result = await login(data);
             return result;
         } catch (error) {
@@ -23,6 +24,7 @@ export const registerUser = createAsyncThunk(
     'user/register',
     async (data, { rejectWithValue }) => {
         try {
+            validator(data);
             const result = await register(data);
             return result;
         } catch (error) {

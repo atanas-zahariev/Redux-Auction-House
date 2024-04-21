@@ -1,4 +1,4 @@
-import { clearUser, setUserData } from './utility';
+import { clearUser, setUser } from './utility';
 import { request } from '../hooks/apiHook';
 
 export const api = () => {
@@ -19,13 +19,13 @@ export const api = () => {
 
     async function login(data) {
         const result = await post(endpoints.login, data);
-        setUserData(result.token);
+        setUser(result.token);
         return result.user;
     }
 
     async function register(data) {
         const result = await post(endpoints.register, data);
-        setUserData(result.token);
+        setUser(result.token);
         return result.user;
     }
 

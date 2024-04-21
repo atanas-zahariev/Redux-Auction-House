@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../services/dataService';
-import { getUser, setUserData } from '../services/utility';
+import { getUser} from '../services/utility';
 
 const { login, register, logout } = api();
 
@@ -13,7 +13,20 @@ export const loginUser = createAsyncThunk(
             const result = await login(data);
             return result;
         } catch (error) {
-            
+
+            return rejectWithValue(error);
+        }
+    }
+);
+
+export const registerUser = createAsyncThunk(
+    'user/register',
+    async (data, { rejectWithValue }) => {
+        try {
+            const result = await register(data);
+            return result;
+        } catch (error) {
+
             return rejectWithValue(error);
         }
     }
@@ -37,7 +50,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        cleanError(state,action){
+        cleanError(state, action) {
             state.error = null;
         }
     },
@@ -45,20 +58,33 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                state.status = 'loginSucceeded';
                 state.persistedState = getUser();
+
                 const { _id: id, email, firstname, lastname, __v } = action.payload;
-                // state.entities[_id] = action.payload;
-                // state.ids.push(_id);
+
                 userAdapter.addOne(state, { id, email, firstname, lastname, __v });
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.status = 'faild';
-                console.log(action.payload);
+                state.status = 'loginFaild';
+
+                state.error = action.payload;
+            })
+            .addCase(registerUser.fulfilled, (state,action) => {
+                state.status = 'registerSucceeded';
+                state.persistedState = getUser();
+                
+                const { _id: id, email, firstname, lastname, __v } = action.payload;
+
+                userAdapter.addOne(state, { id, email, firstname, lastname, __v });
+            })
+            .addCase(registerUser.rejected ,(state,action) => {
+                state.status = 'registerFaild';
+
                 state.error = action.payload;
             })
             .addCase(logoutUser.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                state.status = 'logoutSucceeded';
                 state.persistedState = null;
                 if (action.payload) {
                     userAdapter.removeOne(state, action.payload);
@@ -70,7 +96,7 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const {cleanError} = userSlice.actions;
+export const { cleanError, setUpUser } = userSlice.actions;
 
 export const selectUser = state => state.user;
 

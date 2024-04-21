@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 import { formHandller } from '../services/utility';
-import { cleanError, loginUser, selectError, selectUser } from '../slices/authSlice';
+import { cleanError, loginUser, selectError } from '../slices/authSlice';
 
 export default function Login() {
-    const state = useSelector(selectUser);
     const error = useSelector(selectError);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,8 +16,8 @@ export default function Login() {
         if (result.error) {
             return;
         } else {
-            if(error){
-                dispatch(cleanError(state));
+            if (error) {
+                dispatch(cleanError());
             }
             navigate('/');
         }

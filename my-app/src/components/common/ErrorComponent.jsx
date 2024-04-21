@@ -6,7 +6,7 @@ import { selectError } from '../../slices/authSlice';
 
 export default function Error() {
     const error = useSelector(selectError);
-    console.log(error);
+
     if (Array.isArray(error)) {
         return (
             <div className="error-box">

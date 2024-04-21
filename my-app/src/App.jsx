@@ -5,6 +5,7 @@ import Header from './components/common/HeaderComponents';
 import Login from './auth/LoginComponent';
 import Logout from './auth/LogoutComponent';
 import Error from './components/common/ErrorComponent';
+import Register from './auth/RegisterComponent';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
       </main>
       <footer>SoftUni &copy; 2023 React Exam</footer>

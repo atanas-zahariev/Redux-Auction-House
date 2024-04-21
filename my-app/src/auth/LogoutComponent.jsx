@@ -16,7 +16,7 @@ export default function Logout() {
     useEffect(() => {
         async function fetchData() {
             if(user[0]){
-                dispatch(logoutUser(user[0][0]));
+                await dispatch(logoutUser(user[0][0]));
             }else{
                 dispatch(logoutUser());
             }

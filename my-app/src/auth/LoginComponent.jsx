@@ -5,11 +5,17 @@ import { useNavigate } from 'react-router-dom';
 
 import { formHandller } from '../services/utility';
 import { cleanError, loginUser, selectError } from '../slices/authSlice';
+import { useEffect } from 'react';
 
 export default function Login() {
     const error = useSelector(selectError);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(cleanError());
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      },[]);
 
     const userLogin = async (data) => {
         const result = await dispatch(loginUser(data));

@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, createSelector, createEntityAdapter } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import { api } from '../services/dataService';
-import { getUser, validator} from '../services/utility';
+import { getUser, validator } from '../services/utility';
 
 const { login, register, logout } = api();
 
@@ -72,15 +72,15 @@ const userSlice = createSlice({
 
                 state.error = action.payload;
             })
-            .addCase(registerUser.fulfilled, (state,action) => {
+            .addCase(registerUser.fulfilled, (state, action) => {
                 state.status = 'registerSucceeded';
                 state.persistedState = getUser();
-                
+
                 const { _id: id, email, firstname, lastname, __v } = action.payload;
 
                 userAdapter.addOne(state, { id, email, firstname, lastname, __v });
             })
-            .addCase(registerUser.rejected ,(state,action) => {
+            .addCase(registerUser.rejected, (state, action) => {
                 state.status = 'registerFaild';
 
                 state.error = action.payload;

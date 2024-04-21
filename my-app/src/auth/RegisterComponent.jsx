@@ -3,11 +3,17 @@ import { formHandller } from '../services/utility';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanError, registerUser, selectError } from '../slices/authSlice';
+import { useEffect } from 'react';
 
 export default function Register() {
   const dispatch = useDispatch();
   const error = useSelector(selectError);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(cleanError());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
 
   const onRegister = async (data) => {

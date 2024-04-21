@@ -6,6 +6,8 @@ import Login from './auth/LoginComponent';
 import Logout from './auth/LogoutComponent';
 import Error from './components/common/ErrorComponent';
 import Register from './auth/RegisterComponent';
+import Catalog from './components/common/catalog/CatalogComponent';
+
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
       <main>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/catalog' element={<Catalog />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/register' element={<Register />} />

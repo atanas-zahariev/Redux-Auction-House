@@ -34,11 +34,9 @@ const itemsSlice = createSlice({
         builder
             .addCase(getItems.fulfilled, (state, action) => {
                 function makeCorrectIdForRedux(item) {
-                    // const itemId = item._id;
                     const { _id: id, title, category, description, imgUrl, bider, owner, price, __v } = item;
                     return { id, title, category, description, imgUrl, bider, owner, price, __v };
                 }
-                console.log(action.payload.items.map(makeCorrectIdForRedux));
 
                 itemsAdapter.addMany(state, action.payload.items.map(makeCorrectIdForRedux));
             });

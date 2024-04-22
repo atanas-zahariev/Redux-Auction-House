@@ -26,9 +26,17 @@ export function formHandller(callback) {
     };
 }
 
-export function makeCorrectIdForRedux(item) {
-    const { _id: id, title, category, description, imgUrl, bider, owner, price, __v } = item;
-    return { id, title, category, description, imgUrl, bider, owner, price, __v };
+export function makeCorrectIdForRedux(data) {
+    if (data.type === 'item') {
+        const { _id: id, title, category, description, imgUrl, bider, owner, price, __v } = data;
+
+        return { id, title, category, description, imgUrl, bider, owner, price, __v };
+        
+    } else if (data.type === 'user') {
+        const { _id: id, firstname, lastname, email } = data;
+
+        return { id, firstname, lastname, email }
+    }
 }
 
 

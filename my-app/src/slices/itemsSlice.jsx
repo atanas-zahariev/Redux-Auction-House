@@ -72,3 +72,5 @@ export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapt
 // );
 
 export const selectItemsError = state => state.items.error;
+
+export const selectUserFromCatalog = state => state.items.user;

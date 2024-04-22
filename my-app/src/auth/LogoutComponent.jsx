@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logoutUser, selectUser } from '../slices/authSlice';
+import { clearUserFromCatalog } from '../slices/itemsSlice';
 
 
 export default function Logout() {
@@ -20,6 +21,7 @@ export default function Logout() {
             }else{
                 dispatch(logoutUser());
             }
+            dispatch(clearUserFromCatalog())
         }
         
         fetchData();

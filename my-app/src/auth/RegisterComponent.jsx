@@ -24,6 +24,7 @@ export default function Register() {
       if (error) {
         dispatch(cleanAuthError());
       }
+      dispatch(setUserToCatalog(result.payload));
       navigate('/');
     }
   };

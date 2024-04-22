@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { formHandller } from '../services/utility';
 import { cleanAuthError, loginUser, selectAuthError } from '../slices/authSlice';
 import { useEffect } from 'react';
+import { setUserToCatalog } from '../slices/itemsSlice';
 
 export default function Login() {
     const error = useSelector(selectAuthError);
@@ -14,8 +15,8 @@ export default function Login() {
 
     useEffect(() => {
         dispatch(cleanAuthError());
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const userLogin = async (data) => {
         const result = await dispatch(loginUser(data));
@@ -25,6 +26,7 @@ export default function Login() {
             if (error) {
                 dispatch(cleanAuthError());
             }
+            dispatch(setUserToCatalog(result.payload));
             navigate('/');
         }
     };

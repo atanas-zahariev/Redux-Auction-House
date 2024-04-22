@@ -28,7 +28,7 @@ function App() {
           <Route path='/register' element={<Register />} />
         </Routes>
       </main>
-      <footer>SoftUni &copy; 2023 React Exam</footer>
+      <footer>SoftUni &copy; 2024 React Redux</footer>
     </div>
   );
 }

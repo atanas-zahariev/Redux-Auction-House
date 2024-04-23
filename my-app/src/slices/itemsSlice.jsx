@@ -5,7 +5,7 @@ import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer, getTotalAction, getUserAction } = api();
+const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -13,6 +13,20 @@ export const getItems = createAsyncThunk(
         try {
             const items = await getAllDataInSystem();
             return items;
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    }
+);
+
+export const deleteItem = createAsyncThunk(
+    'items/deleteItem',
+
+    async (id, { rejectWithValue }) => {
+        try {
+            await onDelete(id);
+
+            return id;
         } catch (error) {
             rejectWithValue(error);
         }
@@ -78,6 +92,9 @@ const itemsSlice = createSlice({
         },
         cleanErrorFromCatalog(state, action) {
             state.error = null;
+        },
+        setErrorToCatalog(state,action){
+            state.error = action.payload;
         }
     },
 
@@ -127,13 +144,22 @@ const itemsSlice = createSlice({
             })
             .addCase(closeItemOffer.fulfilled, (state, action) => {
                 state.status = 'closeItemOfferSucceeded';
-                
+
                 const item = state.entities[action.payload];
                 state.closedOffers.push(item);
                 itemsAdapter.removeOne(state, action.payload);
             })
             .addCase(closeItemOffer.rejected, (state, action) => {
                 state.status = 'closeItemOfferFaild';
+
+                state.error = action.payload;
+            })
+            .addCase(deleteItem.fulfilled,(state,action) => {
+                state.status = 'deleteItemSucceeded';
+                itemsAdapter.removeOne(state, action.payload);
+            })
+            .addCase(deleteItem.rejected, (state, action) => {
+                state.status = 'deleteItemFaild';
 
                 state.error = action.payload;
             });
@@ -143,7 +169,7 @@ const itemsSlice = createSlice({
 
 export default itemsSlice.reducer;
 
-export const { setUserToCatalog, clearUserFromCatalog, cleanErrorFromCatalog } = itemsSlice.actions;
+export const { setUserToCatalog, clearUserFromCatalog, cleanErrorFromCatalog,setErrorToCatalog } = itemsSlice.actions;
 
 export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapter.getSelectors(state => state.items);
 

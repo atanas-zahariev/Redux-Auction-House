@@ -35,7 +35,7 @@ export function makeCorrectIdForRedux(data) {
     } else if (data.type === 'user') {
         const { _id: id, firstname, lastname, email } = data;
 
-        return { id, firstname, lastname, email }
+        return { id, firstname, lastname, email };
     }
 }
 

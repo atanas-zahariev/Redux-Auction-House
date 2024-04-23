@@ -4,14 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 
-export default function Owner({ item }) {
+export default function Owner({ item ,user}) {
     const navigate = useNavigate();
 
-
-
-    const { title, imgUrl, category, description, price, bider, _id } = item.item;
-
-    const { user } = item;
+    const { title, imgUrl, category, description, price, bider, id } = item;
 
 
     const onSubmit = async () => {
@@ -42,7 +38,7 @@ export default function Owner({ item }) {
             <h1 className="item">
                 {title}
                 <div className="f-right">
-                    <Link to={`/edit/${_id}`} className="action pad-small f-left" >Edit</Link>
+                    <Link to={`/edit/${id}`} className="action pad-small f-left" >Edit</Link>
                     <Link onClick={deleteItem} className="action pad-small f-left" >Delete</Link>
                 </div>
             </h1>

@@ -1,12 +1,29 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { formHandller } from '../../../services/utility';
+
 import { makeOffer, selectItemsError, cleanErrorFromCatalog} from '../../../slices/itemsSlice';
+import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 
 export default function NotOwner({ item, user }) {
     const dispatch = useDispatch();
 
-    const error = useSelector(selectItemsError);
+    const itemsError = useSelector(selectItemsError);
+    const authError = useSelector(selectAuthError);
+
+
+    useEffect(() => {
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
+        // eslint-disable-next-line
+    }, []);
+
 
 
     const { title, imgUrl, category, description, price, bider, id } = item;
@@ -19,11 +36,13 @@ export default function NotOwner({ item, user }) {
     const setBider = async (data) => {
         data.oldPrice = price;
         data.price = Number(data.price);
+
         const result = await dispatch(makeOffer({ data, id }));
+
         if (result.error) {
             return;
         }else{
-            if(error){
+            if(itemsError){
              dispatch(cleanErrorFromCatalog());
             }
         }

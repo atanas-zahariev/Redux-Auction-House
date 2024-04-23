@@ -5,7 +5,7 @@ import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer, getTotalAction } = api();
+const { getAllDataInSystem, offer, getTotalAction, getUserAction } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -13,6 +13,19 @@ export const getItems = createAsyncThunk(
         try {
             const items = await getAllDataInSystem();
             return items;
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    }
+);
+
+export const closeItemOffer = createAsyncThunk(
+    'items/closeItemOffer',
+
+    async (id, { rejectWithValue }) => {
+        try {
+            await getUserAction(id);
+            return id;
         } catch (error) {
             rejectWithValue(error);
         }
@@ -101,10 +114,28 @@ const itemsSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(getClosedUserItems.fulfilled, (state, action) => {
-                state.closedOffers = action.payload.items.map(item =>{
+                state.status = 'fetchUserClosedOffers';
+                state.closedOffers = action.payload.items.map(item => {
                     item.type = 'item';
                     return makeCorrectIdForRedux(item);
                 });
+            })
+            .addCase(getClosedUserItems.rejected, (state, action) => {
+                state.status = 'fetchUserClosedOffersFaild';
+
+                state.error = action.payload;
+            })
+            .addCase(closeItemOffer.fulfilled, (state, action) => {
+                state.status = 'closeItemOfferSucceeded';
+                
+                const item = state.entities[action.payload];
+                state.closedOffers.push(item);
+                itemsAdapter.removeOne(state, action.payload);
+            })
+            .addCase(closeItemOffer.rejected, (state, action) => {
+                state.status = 'closeItemOfferFaild';
+
+                state.error = action.payload;
             });
 
     }

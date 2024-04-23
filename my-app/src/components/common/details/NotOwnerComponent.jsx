@@ -2,14 +2,13 @@ import { formHandller } from '../../../services/utility';
 
 
 
-export default function NotOwner({ item, setNewState }) {
-    const { user } = item;
+export default function NotOwner({ item,user }) {
 
-    const { title, imgUrl, category, description, price, bider, _id } = item.item;
+    const { title, imgUrl, category, description, price, bider, id } = item;
 
-    const currentUser = user?._id;
+    const currentUser = user?.id;
 
-    const isBider = bider?._id === currentUser;
+    const isBider = bider?.id === currentUser;
 
 
     const setBider = async (data) => {

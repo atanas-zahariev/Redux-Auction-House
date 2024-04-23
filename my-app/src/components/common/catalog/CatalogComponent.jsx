@@ -3,19 +3,23 @@ import { Link } from 'react-router-dom';
 
 
 import { Item } from './ItemComponent';
-import { selectItems } from '../../../slices/itemsSlice';
+import { cleanErrorFromCatalog, selectItems, selectItemsError } from '../../../slices/itemsSlice';
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 
 export default function Catalog() {
     const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
     const dispatch = useDispatch();
     const items = useSelector(state => selectItems(state));
 
     useEffect(() => {
         if (authError) {
             dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
         }
         // eslint-disable-next-line
     }, []);

@@ -4,7 +4,7 @@ import { makeCorrectIdForRedux, validator } from '../services/utility';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, getSpecificDataWithId } = api();
+const { getAllDataInSystem, offer } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -15,6 +15,19 @@ export const getItems = createAsyncThunk(
             return items;
         } catch (error) {
             rejectWithValue(error);
+        }
+    }
+);
+
+export const makeOffer = createAsyncThunk(
+    'items/makeOffer',
+    async ({ data, id }, { rejectWithValue }) => {
+        try {
+            const result = await offer(data, id);
+            return result;
+        } catch (error) {
+           return rejectWithValue(error);
+
         }
     }
 );
@@ -30,11 +43,14 @@ const itemsSlice = createSlice({
     initialState,
     reducers: {
         setUserToCatalog(state, action) {
-            action.payload.type = 'user'
+            action.payload.type = 'user';
             state.user = makeCorrectIdForRedux(action.payload);
         },
         clearUserFromCatalog(state, action) {
             state.user = null;
+        },
+        cleanErrorFromCatalog(state,action){
+            state.error = null;
         }
     },
 
@@ -43,8 +59,8 @@ const itemsSlice = createSlice({
             .addCase(getItems.fulfilled, (state, action) => {
                 state.status = 'fetchItemsSucceeded';
                 itemsAdapter.addMany(state, action.payload.items.map(item => {
-                    item.type = 'item'
-                    return makeCorrectIdForRedux(item)
+                    item.type = 'item';
+                    return makeCorrectIdForRedux(item);
                 }));
                 if (action.payload.user) {
                     action.payload.user.type = 'user';
@@ -55,6 +71,20 @@ const itemsSlice = createSlice({
                 state.status = 'fetchItemsFaild';
 
                 state.error = action.payload;
+            })
+            .addCase(makeOffer.fulfilled, (state, action) => {
+                state.status = 'offerSucceeded';
+                                
+                action.payload.updatedItem.type = 'item';
+
+                const updatedItem = makeCorrectIdForRedux(action.payload.updatedItem);
+                
+                 itemsAdapter.upsertOne(state,updatedItem);
+            })
+            .addCase(makeOffer.rejected, (state, action) => {
+                state.status = 'offerFaild';
+
+                state.error = action.payload;
             });
 
     }
@@ -62,7 +92,7 @@ const itemsSlice = createSlice({
 
 export default itemsSlice.reducer;
 
-export const { setUserToCatalog, clearUserFromCatalog } = itemsSlice.actions;
+export const { setUserToCatalog, clearUserFromCatalog,cleanErrorFromCatalog } = itemsSlice.actions;
 
 export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapter.getSelectors(state => state.items);
 

@@ -7,8 +7,6 @@ import NotOwner from './NotOwnerComponent';
 import Owner from './OwnerComponent';
 
 import { selectItemById, selectUserFromCatalog } from '../../../slices/itemsSlice';
-import { api } from '../../../services/dataService';
-import { useEffect, useState } from 'react';
 
 export default function Details() {
     const { id } = useParams();
@@ -18,17 +16,17 @@ export default function Details() {
     console.log(item);
 
 
-    // if (item.item) {
-    //     const isOwner = item.item.owner === item.user?._id;
-    //     if (isOwner) {
-    //         return (
-    //             <Owner item={item} />
-    //         );
-    //     }
-    //     return (
-    //         <NotOwner item={item} setNewState={setNewState}/>
-    //     );
-    // }
+    if (item) {
+        const isOwner = item.owner === user?.id;
+        if (isOwner) {
+            return (
+                <Owner item={item} user={user} />
+            );
+        }
+        return (
+            <NotOwner item={item} user={user} />
+        );
+    }
 
     return (
         <Spinner />

@@ -8,6 +8,7 @@ import Error from './components/common/ErrorComponent';
 import Register from './auth/RegisterComponent';
 import Catalog from './components/common/catalog/CatalogComponent';
 import Details from './components/common/details/DetailsComponent';
+import UserClosedOffers from './components/common/closed-offers/UserClosedOffersComponent';
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/closed' element={<UserClosedOffers />} />
         </Routes>
       </main>
       <footer>SoftUni &copy; 2024 React Redux</footer>

@@ -23,6 +23,7 @@ export const makeOffer = createAsyncThunk(
     'items/makeOffer',
     async ({ data, id }, { rejectWithValue }) => {
         try {
+            validator(data);
             const result = await offer(data, id);
             return result;
         } catch (error) {
@@ -74,7 +75,7 @@ const itemsSlice = createSlice({
             })
             .addCase(makeOffer.fulfilled, (state, action) => {
                 state.status = 'offerSucceeded';
-                                
+
                 action.payload.updatedItem.type = 'item';
 
                 const updatedItem = makeCorrectIdForRedux(action.payload.updatedItem);

@@ -1,18 +1,29 @@
-
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import FinishedOffers from './FinishedOffersComponent';
 
-const offers = [];
+import { cleanErrorFromCatalog, getClosedUserItems, selectClosedOffers, selectItemsError } from '../../../slices/itemsSlice';
+import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+
 
 export default function UserClosedOffers() {
-   
-   
-    const getUserClosedOffers = async () => {
-       
-    };
-     
+    const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
+    const offers = useSelector( selectClosedOffers);
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        getUserClosedOffers();
+        dispatch(getClosedUserItems());
+        
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
         // eslint-disable-next-line
     }, []);
 
@@ -23,7 +34,7 @@ export default function UserClosedOffers() {
 
             {offers?.length > 0 ?
                 <ul className="catalog cards">
-                    {offers.map(x => <FinishedOffers key={x._id} {...x} />)}
+                    {offers.map(x => <FinishedOffers key={x.id} {...x} />)}
                 </ul>
                 :
                 <div className="item pad-large align-center">

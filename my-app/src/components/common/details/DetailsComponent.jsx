@@ -12,9 +12,6 @@ export default function Details() {
     const { id } = useParams();
     const item = useSelector(state => selectItemById(state, id));
     const user = useSelector(state => selectUserFromCatalog(state));
-    console.log(user);
-    console.log(item);
-
 
     if (item) {
         const isOwner = item.owner === user?.id;
@@ -24,7 +21,7 @@ export default function Details() {
             );
         }
         return (
-            <NotOwner item={item} user={user} />
+            <NotOwner item={item} user={user}/>
         );
     }
 

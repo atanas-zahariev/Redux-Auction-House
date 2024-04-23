@@ -1,18 +1,30 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
+import { useDispatch, useSelector } from 'react-redux';
 import { formHandller } from '../../../services/utility';
+import { makeOffer, selectItemsError, cleanErrorFromCatalog} from '../../../slices/itemsSlice';
 
+export default function NotOwner({ item, user }) {
+    const dispatch = useDispatch();
 
+    const error = useSelector(selectItemsError);
 
-export default function NotOwner({ item,user }) {
 
     const { title, imgUrl, category, description, price, bider, id } = item;
 
     const currentUser = user?.id;
 
-    const isBider = bider?.id === currentUser;
+    const isBider = bider?._id === currentUser;
 
 
     const setBider = async (data) => {
-       
+        const result = await dispatch(makeOffer({ data, id }));
+        if (result.error) {
+            return;
+        }else{
+            if(error){
+             dispatch(cleanErrorFromCatalog());
+            }
+        }
     };
 
     const onSubmit = formHandller(setBider);

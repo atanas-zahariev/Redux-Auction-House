@@ -1,20 +1,32 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
-import { api } from '../services/dataService';
+
 import { makeCorrectIdForRedux, validator } from '../services/utility';
+import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer } = api();
+const { getAllDataInSystem, offer, getTotalAction } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
     async (_, { rejectWithValue }) => {
         try {
             const items = await getAllDataInSystem();
-            console.log(items);
             return items;
         } catch (error) {
             rejectWithValue(error);
+        }
+    }
+);
+
+export const getClosedUserItems = createAsyncThunk(
+    'items/fetchClosedUserItems',
+    async (_, { rejectWithValue }) => {
+        try {
+            const result = await getTotalAction();
+            return result;
+        } catch (error) {
+            return rejectWithValue(error);
         }
     }
 );
@@ -27,7 +39,7 @@ export const makeOffer = createAsyncThunk(
             const result = await offer(data, id);
             return result;
         } catch (error) {
-           return rejectWithValue(error);
+            return rejectWithValue(error);
 
         }
     }
@@ -36,7 +48,8 @@ export const makeOffer = createAsyncThunk(
 const initialState = itemsAdapter.getInitialState({
     status: 'idle',
     error: null,
-    user: null
+    user: null,
+    closedOffers: null
 });
 
 const itemsSlice = createSlice({
@@ -50,7 +63,7 @@ const itemsSlice = createSlice({
         clearUserFromCatalog(state, action) {
             state.user = null;
         },
-        cleanErrorFromCatalog(state,action){
+        cleanErrorFromCatalog(state, action) {
             state.error = null;
         }
     },
@@ -79,13 +92,19 @@ const itemsSlice = createSlice({
                 action.payload.updatedItem.type = 'item';
 
                 const updatedItem = makeCorrectIdForRedux(action.payload.updatedItem);
-                
-                 itemsAdapter.upsertOne(state,updatedItem);
+
+                itemsAdapter.upsertOne(state, updatedItem);
             })
             .addCase(makeOffer.rejected, (state, action) => {
                 state.status = 'offerFaild';
 
                 state.error = action.payload;
+            })
+            .addCase(getClosedUserItems.fulfilled, (state, action) => {
+                state.closedOffers = action.payload.items.map(item =>{
+                    item.type = 'item';
+                    return makeCorrectIdForRedux(item);
+                });
             });
 
     }
@@ -93,7 +112,7 @@ const itemsSlice = createSlice({
 
 export default itemsSlice.reducer;
 
-export const { setUserToCatalog, clearUserFromCatalog,cleanErrorFromCatalog } = itemsSlice.actions;
+export const { setUserToCatalog, clearUserFromCatalog, cleanErrorFromCatalog } = itemsSlice.actions;
 
 export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapter.getSelectors(state => state.items);
 
@@ -105,3 +124,5 @@ export const { selectAll: selectItems, selectById: selectItemById } = itemsAdapt
 export const selectItemsError = state => state.items.error;
 
 export const selectUserFromCatalog = state => state.items.user;
+
+export const selectClosedOffers = state => state.items.closedOffers;

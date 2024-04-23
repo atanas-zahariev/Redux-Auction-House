@@ -17,6 +17,8 @@ export default function NotOwner({ item, user }) {
 
 
     const setBider = async (data) => {
+        data.oldPrice = price;
+        data.price = Number(data.price);
         const result = await dispatch(makeOffer({ data, id }));
         if (result.error) {
             return;

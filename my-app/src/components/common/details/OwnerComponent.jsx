@@ -1,23 +1,42 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { closeItemOffer } from '../../../slices/itemsSlice';
+import { cleanErrorFromCatalog, closeItemOffer, selectItemsError } from '../../../slices/itemsSlice';
+import { useEffect } from 'react';
+import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 
 
-export default function Owner({ item ,user}) {
+export default function Owner({ item, user }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { title, imgUrl, category, description, price, bider, id } = item;
 
+    const itemsError = useSelector(selectItemsError);
+    const authError = useSelector(selectAuthError);
+
+
+    useEffect(() => {
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
+        // eslint-disable-next-line
+    }, []);
+
 
     const onSubmit = async () => {
-       await dispatch(closeItemOffer(id));
-       navigate('/closed');
+        const result = await dispatch(closeItemOffer(id));
+        if (result.error) {
+            return;
+        }
+        navigate('/closed');
     };
 
 
-   
+
 
 
     function deleteItem() {

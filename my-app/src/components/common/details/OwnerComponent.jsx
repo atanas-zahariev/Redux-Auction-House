@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-
-
+import { closeItemOffer } from '../../../slices/itemsSlice';
 
 
 export default function Owner({ item ,user}) {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { title, imgUrl, category, description, price, bider, id } = item;
 
 
     const onSubmit = async () => {
-       
+       await dispatch(closeItemOffer(id));
+       navigate('/closed');
     };
 
 

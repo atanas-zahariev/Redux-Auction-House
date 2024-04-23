@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { cleanErrorFromCatalog, closeItemOffer, selectItemsError } from '../../../slices/itemsSlice';
-import { useEffect } from 'react';
+
+import { getUser } from '../../../services/utility';
+
+import { cleanErrorFromCatalog, closeItemOffer, selectItemsError, setErrorToCatalog } from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 
 
@@ -15,6 +18,7 @@ export default function Owner({ item, user }) {
     const itemsError = useSelector(selectItemsError);
     const authError = useSelector(selectAuthError);
 
+    const [checkForUser, setCheck] = useState(false);
 
     useEffect(() => {
         if (authError) {
@@ -35,20 +39,19 @@ export default function Owner({ item, user }) {
         navigate('/closed');
     };
 
-
-
-
+    if (checkForUser) {
+        navigate('/logout');
+    }
 
     function deleteItem() {
-        // const hasUser = getUser();
+        const hasUser = getUser();
 
-        // if (!hasUser) {
-        //     setCheck(true);
-        //     return;
-        // }
+        if (!hasUser) {
+            setCheck(true);
+            return;
+        }
 
-        // getError(`Delete/${title}/${_id}`);
-
+        dispatch(setErrorToCatalog(`Delete/${title}/${id}`));
     }
 
 

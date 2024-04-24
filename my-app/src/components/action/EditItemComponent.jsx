@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useNavigate, useParams } from 'react-router-dom';
 
 
@@ -6,31 +6,33 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Spinner from '../common/Spinner';
 
 import { formHandller } from '../../services/utility';
+import { useDispatch, useSelector } from 'react-redux';
+import { editItem, selectItemById } from '../../slices/itemsSlice';
 
 export default function Edit() {
-    const { id } = useParams();
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
+    const { id } = useParams();
 
+    const item = useSelector(state => selectItemById(state, id));
 
-    const [item, setItem] = useState({});
-
-    const getItem = async () => {
-      
+    const editCurrentItem = async (data) => {
+        if (!data.price) {
+            data.price = item.price;
+        }
+        const result = await dispatch(editItem({ data, id }));
+        if (result.error) {
+            return;
+        } else {
+            navigate(`/details/${id}`);
+        }
     };
+    const onSubmit = formHandller(editCurrentItem);
 
-    const editItem = async (data) => {
-       
-    };
-    const onSubmit = formHandller(editItem);
 
-    useEffect(() => {
-        getItem();
-        // eslint-disable-next-line
-    }, []);
-
-    if (item.item) {
+    if (item) {
 
         return (
             <section id="create-section">
@@ -44,12 +46,12 @@ export default function Edit() {
                         <div className="col aligned">
                             <label>
                                 <span>Title</span>
-                                <input type="text" name="title" defaultValue={item.item.title} />
+                                <input type="text" name="title" defaultValue={item.title} />
                             </label>
 
                             <label>
                                 <span>Category</span>
-                                <select name="category" defaultValue={item.item.category}  >
+                                <select name="category" defaultValue={item.category}  >
                                     <option value="estate">Real Estate</option>
                                     <option value="vehicles">Vehicles</option>
                                     <option value="furniture">Furniture</option>
@@ -60,22 +62,22 @@ export default function Edit() {
 
                             <label>
                                 <span>Image URL</span>
-                                <input type="text" name="imgUrl" defaultValue={item.item.imgUrl} />
+                                <input type="text" name="imgUrl" defaultValue={item.imgUrl} />
                             </label>
 
                             <label>
                                 <span>Starting price</span>
                                 <input type="number" name="price"
-                                    disabled={(item.item.bider) ? 'disabled' : ''}
-                                    defaultValue={item.item.price}
-                                     />
+                                    disabled={(item.bider) ? 'disabled' : ''}
+                                    defaultValue={item.price}
+                                />
                             </label>
                         </div>
 
                         <div className="content pad-med align-center vertical">
                             <label>
                                 <span>Description</span>
-                                <textarea name="description" defaultValue={item.item.description} ></textarea>
+                                <textarea name="description" defaultValue={item.description} ></textarea>
                             </label>
 
                             <div className="align-center">

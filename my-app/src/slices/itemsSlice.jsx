@@ -14,7 +14,7 @@ export const getItems = createAsyncThunk(
             const items = await getAllDataInSystem();
             return items;
         } catch (error) {
-            rejectWithValue(error);
+            return rejectWithValue(error);
         }
     }
 );
@@ -23,8 +23,10 @@ export const editItem = createAsyncThunk(
     'items/editItem',
     async ({ data, id }, { rejectWithValue }) => {
         try {
-            const result = await onEdit(data, id);
-            return result;
+            validator(data);
+            await onEdit(data, id);
+            data.id = id;
+            return { ...data };
         } catch (error) {
             return rejectWithValue(error);
         }
@@ -41,7 +43,7 @@ export const deleteItem = createAsyncThunk(
 
             return id;
         } catch (error) {
-            rejectWithValue(error);
+           return rejectWithValue(error);
         }
     }
 );
@@ -54,7 +56,7 @@ export const closeItemOffer = createAsyncThunk(
             await getUserAction(id);
             return id;
         } catch (error) {
-            rejectWithValue(error);
+            return rejectWithValue(error);
         }
     }
 );
@@ -173,6 +175,16 @@ const itemsSlice = createSlice({
             })
             .addCase(deleteItem.rejected, (state, action) => {
                 state.status = 'deleteItemFaild';
+
+                state.error = action.payload;
+            })
+            .addCase(editItem.fulfilled, (state, action) => {
+                state.status = 'editItemSucceeded';
+
+                itemsAdapter.upsertOne(state, action.payload);
+            })
+            .addCase(editItem.rejected, (state, action) => {
+                state.status = 'editItemFaild';
 
                 state.error = action.payload;
             });

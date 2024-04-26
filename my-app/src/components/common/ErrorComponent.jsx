@@ -1,21 +1,16 @@
 /* eslint-disable no-inner-declarations */
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthError } from '../../slices/authSlice';
-import { cleanErrorFromCatalog, deleteItem, selectItemsError, setErrorToCatalog } from '../../slices/itemsSlice';
+import { useDispatch } from 'react-redux';
+import { cleanErrorFromCatalog, deleteItem, setErrorToCatalog } from '../../slices/itemsSlice';
 import { useNavigate } from 'react-router-dom';
 
 
 
-export default function Error() {
+export default function Error({ error }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const authError = useSelector(selectAuthError);
-    const itemsError = useSelector(selectItemsError);
-    const error = itemsError || authError;
 
     console.log(error);
-
     function cancelDelete() {
         dispatch(cleanErrorFromCatalog());
     }

@@ -14,7 +14,9 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(cleanAuthError());
+        if(error){
+            dispatch(cleanAuthError());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

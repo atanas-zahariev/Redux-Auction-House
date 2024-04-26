@@ -11,9 +11,11 @@ export default function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(cleanAuthError());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    if (error) {
+      dispatch(cleanAuthError());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   const onRegister = async (data) => {

@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { formHandller } from '../services/utility';
+import { formHandller } from '../../services/utility';
 
-import { setUserToCatalog } from '../slices/itemsSlice';
-import { cleanAuthError, registerUser, selectAuthError } from '../slices/authSlice';
+import { setUserToCatalog } from '../../slices/itemsSlice';
+import { cleanAuthError, registerUser, selectAuthError } from '../../slices/authSlice';
 
 export default function Register() {
   const dispatch = useDispatch();

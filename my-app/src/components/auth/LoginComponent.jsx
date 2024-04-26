@@ -1,12 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { formHandller } from '../../services/utility';
 
-import { formHandller } from '../services/utility';
-import { cleanAuthError, loginUser, selectAuthError } from '../slices/authSlice';
-import { useEffect } from 'react';
-import { setUserToCatalog } from '../slices/itemsSlice';
+import { setUserToCatalog } from '../../slices/itemsSlice';
+import { cleanAuthError, loginUser, selectAuthError} from '../../slices/authSlice';
 
 export default function Login() {
     const error = useSelector(selectAuthError);

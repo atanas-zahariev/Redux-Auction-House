@@ -16,8 +16,7 @@ import Details from './components/common/details/DetailsComponent';
 import UserClosedOffers from './components/common/closed-offers/UserClosedOffersComponent';
 
 import Edit from './components/action/EditItemComponent';
-
-
+import Search from './components/action/SearchComponent';
 
 
 function App() {
@@ -33,6 +32,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/catalog' element={<Catalog />} />
+          <Route path='/search' element={<Search />} />
           <Route path='/details/:id' element={<Details />} />
           <Route path='/edit/:id' element={<Edit />} />
           <Route path='/login' element={<Login />} />

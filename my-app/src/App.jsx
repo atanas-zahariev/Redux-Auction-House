@@ -1,4 +1,8 @@
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
+import { selectAuthError } from './slices/authSlice';
+import { selectItemsError } from './slices/itemsSlice';
 
 import Home from './components/common/HomeComponent';
 import Header from './components/common/HeaderComponents';
@@ -15,11 +19,14 @@ import Edit from './components/action/EditItemComponent';
 
 
 function App() {
-  console.log('App is re-render');
+  const authError = useSelector(selectAuthError);
+  const itemsError = useSelector(selectItemsError);
+  const error = itemsError || authError;
+
   return (
     <div id="page-content">
       <Header />
-      <Error />
+      {error && <Error error={error}/>}
       <main>
         <Routes>
           <Route path='/' element={<Home />} />

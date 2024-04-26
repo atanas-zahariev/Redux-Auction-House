@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SearchTable } from './SearchTable';
+
 import { formHandller } from '../../services/utility';
-import { selectItems } from '../../slices/itemsSlice';
+
+import { cleanAuthError, selectAuthError } from '../../slices/authSlice';
+import { cleanErrorFromCatalog, selectItems, selectItemsError } from '../../slices/itemsSlice';
 
 export default function Search() {
+    const dispatch = useDispatch();
+    
     const items = useSelector(selectItems);
+    const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
 
     const [searchItems, setSearchItems] = useState(() => {
         const searchItemsState = sessionStorage.getItem('search');
@@ -20,6 +27,12 @@ export default function Search() {
     });
 
     useEffect(() => {
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
 
         const select = document.getElementById('select');
         select.value = '';

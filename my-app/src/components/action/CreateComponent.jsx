@@ -1,23 +1,29 @@
-import { useContext, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formHandller } from '../../services/utility';
+import { useDispatch } from 'react-redux';
+import { createItem } from '../../slices/itemsSlice';
 
 
 
 export default function CreateItem() {
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
         // eslint-disable-next-line
     }, []);
 
-    const createItem = async (data) => {
-        
+    const create = async (data) => {
+        const result = await dispatch(createItem(data))
+        if(result.error){
+            return;
+        }
+        navigate('/catalog');
     };
 
-    const onSubmit = formHandller(createItem);
+    const onSubmit = formHandller(create);
 
     return (
         <section id="create-section" className="">

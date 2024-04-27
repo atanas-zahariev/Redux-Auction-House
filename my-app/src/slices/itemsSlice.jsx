@@ -23,6 +23,7 @@ export const createItem = createAsyncThunk(
     'items/createItem',
     async (data, { rejectWithValue }) => {
         try {
+            validator(data);
             const result = await addInSystem(data);
             return result
         } catch (error) {

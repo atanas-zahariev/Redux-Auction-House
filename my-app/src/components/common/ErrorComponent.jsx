@@ -1,8 +1,11 @@
 /* eslint-disable no-inner-declarations */
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useDispatch } from 'react-redux';
-import { cleanErrorFromCatalog, deleteItem, setErrorToCatalog } from '../../slices/itemsSlice';
-import { useNavigate } from 'react-router-dom';
+import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
+import {  useNavigate } from 'react-router-dom';
+import { clearUser } from '../../services/utility';
+import { setPersistedStateToNull } from '../../slices/authSlice';
+import { useEffect } from 'react';
 
 
 
@@ -10,7 +13,15 @@ export default function Error({ error }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    console.log(error);
+    useEffect(() => {
+        // In case someone manipulates localStorage to make a request with a fake token.
+        if(error[0] === 'Invalid authorization token'){
+            clearUser();
+            dispatch(setPersistedStateToNull());
+            dispatch(getItems());
+        }
+    },[])
+
     function cancelDelete() {
         dispatch(cleanErrorFromCatalog());
     }

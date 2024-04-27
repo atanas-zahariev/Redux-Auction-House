@@ -54,6 +54,9 @@ const userSlice = createSlice({
     reducers: {
         cleanAuthError(state, action) {
             state.error = null;
+        },
+        setPersistedStateToNull(state, action) {
+            state.persistedState = null;
         }
     },
 
@@ -96,7 +99,7 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { cleanAuthError, setUpUser } = userSlice.actions;
+export const { cleanAuthError, setUpUser, setPersistedStateToNull } = userSlice.actions;
 
 export const selectUser = state => state.user;
 

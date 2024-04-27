@@ -1,25 +1,38 @@
-import {  useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { formHandller } from '../../services/utility';
-import { useDispatch } from 'react-redux';
-import { createItem } from '../../slices/itemsSlice';
+
+import { cleanAuthError, selectAuthError } from '../../slices/authSlice';
+import { cleanErrorFromCatalog, createItem, selectItemsError } from '../../slices/itemsSlice';
 
 
 
 export default function CreateItem() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
 
 
     useEffect(() => {
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
         // eslint-disable-next-line
     }, []);
 
     const create = async (data) => {
-        const result = await dispatch(createItem(data))
-        if(result.error){
+        const result = await dispatch(createItem(data));
+
+        if (result.error) {
             return;
         }
+        
         navigate('/catalog');
     };
 

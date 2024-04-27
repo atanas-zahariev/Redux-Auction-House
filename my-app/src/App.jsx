@@ -11,6 +11,7 @@ import Register from './components/auth/RegisterComponent';
 import Home from './components/common/HomeComponent';
 import Header from './components/common/HeaderComponents';
 import Error from './components/common/ErrorComponent';
+import Default from './components/common/DefaultComponent';
 import Catalog from './components/common/catalog/CatalogComponent';
 import Details from './components/common/details/DetailsComponent';
 import UserClosedOffers from './components/common/closed-offers/UserClosedOffersComponent';
@@ -39,6 +40,8 @@ function App() {
           <Route path='/logout' element={<Logout />} />
           <Route path='/register' element={<Register />} />
           <Route path='/closed' element={<UserClosedOffers />} />
+          <Route path='*' element={<Default />} />
+
         </Routes>
       </main>
       <footer>SoftUni &copy; 2024 React Redux</footer>

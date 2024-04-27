@@ -1,8 +1,20 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { cleanErrorFromCatalog, selectItemsError } from '../../slices/itemsSlice';
 
 export default function Home() {
-       
+    const dispatch = useDispatch();
+    const itemsError = useSelector(selectItemsError);
+
+
+    useEffect(() => {
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
+        // eslint-disable-next-line
+    }, []);
+
     return (
         <section id="catalog-section">
 

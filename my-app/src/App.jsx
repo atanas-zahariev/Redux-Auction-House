@@ -19,6 +19,7 @@ import UserClosedOffers from './components/common/closed-offers/UserClosedOffers
 import Edit from './components/action/EditItemComponent';
 import Search from './components/action/SearchComponent';
 import CreateItem from './components/action/CreateComponent';
+import { AuthGuard } from './guards/UserGuard';
 
 
 function App() {
@@ -29,19 +30,24 @@ function App() {
   return (
     <div id="page-content">
       <Header />
-      {error && <Error error={error}/>}
+      {error && <Error error={error} />}
       <main>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/catalog' element={<Catalog />} />
-          <Route path='/search' element={<Search />} />
           <Route path='/details/:id' element={<Details />} />
-          <Route path='/create' element={<CreateItem />} />
-          <Route path='/edit/:id' element={<Edit />} />
+          <Route path='/search' element={<Search />} />
+          
+          <Route element={<AuthGuard />}>
+            <Route path='/closed' element={<UserClosedOffers />} />
+            <Route path='/create' element={<CreateItem />} />
+            <Route path='/edit/:id' element={<Edit />} />
+          </Route>
+
           <Route path='/login' element={<Login />} />
-          <Route path='/logout' element={<Logout />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/closed' element={<UserClosedOffers />} />
+          <Route path='/logout' element={<Logout />} />
+
           <Route path='*' element={<Default />} />
 
         </Routes>

@@ -5,7 +5,7 @@ import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit } = api();
+const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -18,6 +18,18 @@ export const getItems = createAsyncThunk(
         }
     }
 );
+
+const createItem = createAsyncThunk(
+    'items/createItem',
+    async (data, { rejectWithValue }) => {
+        try {
+            const result = await addInSystem(data);
+            return result
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+)
 
 export const editItem = createAsyncThunk(
     'items/editItem',
@@ -43,7 +55,7 @@ export const deleteItem = createAsyncThunk(
 
             return id;
         } catch (error) {
-           return rejectWithValue(error);
+            return rejectWithValue(error);
         }
     }
 );
@@ -187,7 +199,18 @@ const itemsSlice = createSlice({
                 state.status = 'editItemFaild';
 
                 state.error = action.payload;
-            });
+            })
+            .addCase(createItem.fulfilled, (state, action) => {
+                state.status = 'createItemSucceeded';
+                action.payload.type = 'item';
+                
+                itemsAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
+            })
+            .addCase(createItem.rejected, (state, action) => {
+                state.status = 'createItemSucceeded';
+                 
+                state.error = action.payload;
+            })
 
     }
 });

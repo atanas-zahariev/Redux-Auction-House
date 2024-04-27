@@ -19,7 +19,7 @@ export const getItems = createAsyncThunk(
     }
 );
 
-const createItem = createAsyncThunk(
+export const createItem = createAsyncThunk(
     'items/createItem',
     async (data, { rejectWithValue }) => {
         try {
@@ -203,12 +203,12 @@ const itemsSlice = createSlice({
             .addCase(createItem.fulfilled, (state, action) => {
                 state.status = 'createItemSucceeded';
                 action.payload.type = 'item';
-                
+
                 itemsAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
             })
             .addCase(createItem.rejected, (state, action) => {
                 state.status = 'createItemSucceeded';
-                 
+
                 state.error = action.payload;
             })
 

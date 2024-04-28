@@ -29,6 +29,16 @@ notificationsControler.post('/createNotice', hasUser(), async (req, res) => {
     }
 })
 
+notificationsControler.get('/notices', async (req, res) => {
+    try {
+        const result = await getAllNotifications()
+        res.json(result);
+    } catch (error) {
+        const message = errorParser(error);
+        res.status(400).json(message)
+    }
+})
+
 notificationsControler.get('/notice/:id', async (req, res) => {
     try {
         const result = await getNotificationById(req.params.id);

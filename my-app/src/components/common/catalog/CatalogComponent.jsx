@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Item } from './ItemComponent';
-import { cleanErrorFromCatalog, selectItems, selectItemsError } from '../../../slices/itemsSlice';
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useDispatch, useSelector } from 'react-redux';
+
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+import { cleanErrorFromCatalog, selectItems, selectItemsError } from '../../../slices/itemsSlice';
 
 export default function Catalog() {
     const authError = useSelector(selectAuthError);

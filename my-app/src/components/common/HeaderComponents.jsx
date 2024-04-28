@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { Link } from 'react-router-dom';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSelector } from 'react-redux';
+
 import { selectPersistedState } from '../../slices/authSlice';
 
 export default function Header() {

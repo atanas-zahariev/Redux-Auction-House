@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +13,7 @@ import { cleanErrorFromCatalog, createItem, selectItemsError } from '../../slice
 export default function CreateItem() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
     const authError = useSelector(selectAuthError);
     const itemsError = useSelector(selectItemsError);
 

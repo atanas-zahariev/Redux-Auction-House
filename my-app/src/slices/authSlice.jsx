@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
-import { api } from '../services/dataService';
+
 import { getUser, makeCorrectIdForRedux, validator } from '../services/utility';
+
+import { api } from '../services/dataService';
 
 const { login, register, logout } = api();
 

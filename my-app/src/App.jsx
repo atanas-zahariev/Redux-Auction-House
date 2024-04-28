@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ import UserClosedOffers from './components/common/closed-offers/UserClosedOffers
 import Edit from './components/action/EditItemComponent';
 import Search from './components/action/SearchComponent';
 import CreateItem from './components/action/CreateComponent';
+
 import { AuthGuard } from './guards/UserGuard';
 
 

@@ -3,13 +3,15 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Spinner from '../Spinner';
-import NotOwner from './NotOwnerComponent';
+
 import Owner from './OwnerComponent';
+import NotOwner from './NotOwnerComponent';
 
 import { selectItemById, selectUserFromCatalog } from '../../../slices/itemsSlice';
 
 export default function Details() {
     const { id } = useParams();
+    
     const item = useSelector(state => selectItemById(state, id));
     const user = useSelector(state => selectUserFromCatalog(state));
 

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import FinishedOffers from './FinishedOffersComponent';
 
-import { cleanErrorFromCatalog, getClosedUserItems, selectClosedOffers, selectItemsError } from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+import { cleanErrorFromCatalog, getClosedUserItems, selectClosedOffers, selectItemsError } from '../../../slices/itemsSlice';
 
 
 export default function UserClosedOffers() {

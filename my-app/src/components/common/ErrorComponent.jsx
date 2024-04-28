@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 /* eslint-disable no-inner-declarations */
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useDispatch } from 'react-redux';
-import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
-import {  useNavigate } from 'react-router-dom';
-import { clearUser } from '../../services/utility';
-import { setPersistedStateToNull } from '../../slices/authSlice';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {  useNavigate } from 'react-router-dom';
+
+import { clearUser } from '../../services/utility';
+
+import { setPersistedStateToNull } from '../../slices/authSlice';
+import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
 
 
 
@@ -20,7 +22,8 @@ export default function Error({ error }) {
             dispatch(setPersistedStateToNull());
             dispatch(getItems());
         }
-    },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     function cancelDelete() {
         dispatch(cleanErrorFromCatalog());

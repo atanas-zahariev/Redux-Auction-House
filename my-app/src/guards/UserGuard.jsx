@@ -1,6 +1,9 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { getUser } from '../services/utility';
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useSelector } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
+
+import { getUser } from '../services/utility';
+
 import { selectUserFromCatalog } from '../slices/itemsSlice';
 
 export const AuthGuard = ({

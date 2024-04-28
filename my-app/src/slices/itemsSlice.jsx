@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 
 import { makeCorrectIdForRedux, validator } from '../services/utility';
+
 import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
@@ -25,12 +26,12 @@ export const createItem = createAsyncThunk(
         try {
             validator(data);
             const result = await addInSystem(data);
-            return result
+            return result;
         } catch (error) {
             return rejectWithValue(error);
         }
     }
-)
+);
 
 export const editItem = createAsyncThunk(
     'items/editItem',
@@ -211,7 +212,7 @@ const itemsSlice = createSlice({
                 state.status = 'createItemSucceeded';
 
                 state.error = action.payload;
-            })
+            });
 
     }
 });

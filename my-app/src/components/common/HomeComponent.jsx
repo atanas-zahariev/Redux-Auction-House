@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
+
 import { cleanErrorFromCatalog, selectItemsError } from '../../slices/itemsSlice';
 
 export default function Home() {

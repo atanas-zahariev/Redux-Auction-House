@@ -1,4 +1,4 @@
-import { Item } from "../common/catalog/ItemComponent";
+import { Item } from '../common/catalog/ItemComponent';
 
 export const SearchTable = ({ searchItems }) => {
     return (
@@ -14,5 +14,5 @@ export const SearchTable = ({ searchItems }) => {
             }
 
         </section>
-    )
-}
+    );
+};

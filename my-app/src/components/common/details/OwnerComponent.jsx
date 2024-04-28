@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { getUser } from '../../../services/utility';
 
-import { cleanErrorFromCatalog, closeItemOffer, selectItemsError, setErrorToCatalog } from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+import { cleanErrorFromCatalog, closeItemOffer, selectItemsError, setErrorToCatalog } from '../../../slices/itemsSlice';
 
 
 export default function Owner({ item, user }) {

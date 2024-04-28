@@ -2,7 +2,7 @@ const { Schema, model, Types } = require('mongoose');
 
 
 const notificationsSchema = new Schema({
-    incomingMessage: {
+    message: {
         type: String,
         required: true,
         minLength: [3, 'Your message must be at least 3 characters.'],

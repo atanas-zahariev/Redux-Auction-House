@@ -11,7 +11,7 @@ const notificationsSchema = new Schema({
 
     product: { type: Types.ObjectId, ref: 'Item', required: true },
 
-    bider: { type: Types.ObjectId, ref: 'User', required: true }
+    user: { type: Types.ObjectId, ref: 'User', required: true }
 
 });
 

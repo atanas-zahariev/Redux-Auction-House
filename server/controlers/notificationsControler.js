@@ -49,5 +49,19 @@ notificationsControler.get('/notice/:id', async (req, res) => {
     }
 })
 
+notificationsControler.post('/editNotice/:id', async (req, res) => {
+     const {message} = req.body
+
+     const editedMesage = {message};
+
+     try {
+        const result = await editNotification(editedMesage, req.params.id)
+        res.json(result)
+     } catch (error) {
+        const message = errorParser(error);
+        res.status(400).json(message)
+     }
+})
+
 
 module.exports = notificationsControler;

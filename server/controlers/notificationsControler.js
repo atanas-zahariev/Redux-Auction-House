@@ -11,18 +11,28 @@ const {
 
 const notificationsControler = require('express').Router()
 
-notificationsControler.post('/createNot',hasUser(), async (req, res) => {
+notificationsControler.post('/createNotice', hasUser(), async (req, res) => {
     const { message, product, user } = req.body;
 
     const item = {
         message,
         product,
-        user: req.user._id
+        user
     }
 
     try {
         const result = await createNotification(item)
-        return result;
+        res.json(result)
+    } catch (error) {
+        const message = errorParser(error);
+        res.status(400).json(message)
+    }
+})
+
+notificationsControler.get('/notice/:id', async (req, res) => {
+    try {
+        const result = await getNotificationById(req.params.id);
+        res.json(result)
     } catch (error) {
         const message = errorParser(error);
         res.status(400).json(message)

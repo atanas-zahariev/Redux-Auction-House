@@ -22,6 +22,7 @@ import Search from './components/action/SearchComponent';
 import CreateItem from './components/action/CreateComponent';
 
 import { AuthGuard } from './guards/UserGuard';
+import RecivedNotices from './components/common/notice/RecivedNotice';
 
 
 function App() {
@@ -39,11 +40,12 @@ function App() {
           <Route path='/catalog' element={<Catalog />} />
           <Route path='/details/:id' element={<Details />} />
           <Route path='/search' element={<Search />} />
-          
+
           <Route element={<AuthGuard />}>
             <Route path='/closed' element={<UserClosedOffers />} />
             <Route path='/create' element={<CreateItem />} />
             <Route path='/edit/:id' element={<Edit />} />
+            <Route path='/notice' element={<RecivedNotices />} />
           </Route>
 
           <Route path='/login' element={<Login />} />

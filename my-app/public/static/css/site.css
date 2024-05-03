@@ -6,6 +6,7 @@
 @import url('./layout-position.css');
 @import url('./layout-forms.css');
 @import url('./spinner.css');
+@import url('./layout-notice.css');
 
 .style-divider {
     background-color: red;

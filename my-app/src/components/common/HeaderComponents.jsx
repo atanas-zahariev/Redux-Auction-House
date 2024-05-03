@@ -13,51 +13,55 @@ export default function Header() {
                 <img src="/static/assets/logo.png" alt="static" />
                 <span>Auction House</span>
             </Link>
-            <nav className="main-nav nav-mid">               
-                    {state && (
-                        <ul>
-                            <li>
-                                <Link to="/catalog">Browse</Link>
-                            </li>
-                             <li>
-                                <Link to="/search">Search</Link>
-                            </li>
+            <nav className="main-nav nav-mid">
+                {state && (
+                    <ul>
+                        <li>
+                            <Link to="/catalog">Browse</Link>
+                        </li>
+                        <li>
+                            <Link to="/search">Search</Link>
+                        </li>
 
-                            <li className="user">
-                                <Link to="/create">Publish</Link>
-                            </li>
-
-
-                            <li className="user">
-                                <Link to="/closed">Closed Auctions</Link>
-                            </li>
+                        <li className="user">
+                            <Link to="/create">Publish</Link>
+                        </li>
 
 
-                            <li className="user">
-                                <Link to="/logout">Logout</Link>
-                            </li>
-                        </ul>
-                    )}
+                        <li className="user">
+                            <Link to="/closed">Closed Auctions</Link>
+                        </li>
 
-                    {!state && (
-                        <ul>
-                            <li>
-                                <Link to="/catalog">Browse</Link>
-                            </li>
-                            <li>
-                                <Link to="/search">Search</Link>
-                            </li>
+                        <li>
+                            <Link to="/notice">Notifications</Link>
+                        </li>
 
-                            <li className="guest">
-                                <Link to="/register">Register</Link>
-                            </li>
+                        <li className="user">
+                            <Link to="/logout">Logout</Link>
+                        </li>
+                        
+                    </ul>
+                )}
 
-                            <li className="guest">
-                                <Link to="/login">Login</Link>
-                            </li>
-                        </ul>
-                    )}  
-                                  
+                {!state && (
+                    <ul>
+                        <li>
+                            <Link to="/catalog">Browse</Link>
+                        </li>
+                        <li>
+                            <Link to="/search">Search</Link>
+                        </li>
+
+                        <li className="guest">
+                            <Link to="/register">Register</Link>
+                        </li>
+
+                        <li className="guest">
+                            <Link to="/login">Login</Link>
+                        </li>
+                    </ul>
+                )}
+
             </nav>
         </header>
     );

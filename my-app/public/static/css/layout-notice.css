@@ -1,0 +1,80 @@
+/* Received notice */
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css';
+
+
+.notice {
+    margin: 84px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#catalog-section {
+    box-shadow: 8px 8px 16px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.item.noticeHeader {
+
+    box-shadow: none;
+}
+
+.notice .userName,
+.notice .userMassege {
+    margin-bottom: 20px;
+    max-width: 350px;
+    text-align: center;
+}
+
+.notice .userName>span {
+    font-weight: 600;
+}
+
+.notice .userMassege span {
+    margin-right: 20px;
+}
+
+.noticeContainer {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e4e7e4;
+}
+
+.noticeImg {
+    max-width: 400px;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.noticeImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.noticeForm input {
+    background-color: #7d367d;
+    color: #ffffff;
+    border: none;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+
+.noticeForm input {
+    display: block;
+    margin: auto;
+}
+
+.notice input:hover {
+    background-color: hsl(var(--action-color), var(--action-s), var(--action-l));
+    cursor: pointer;
+    color: white;
+}
+
+.noticeForm textarea {
+    display: block;
+    margin-bottom: 20px;
+    width: 100%;
+    resize: vertical;
+}

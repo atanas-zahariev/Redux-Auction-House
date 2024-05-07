@@ -2,6 +2,8 @@
 import { Link } from "react-router-dom";
 
 export default function NoticeList() {
+    const user = 'Gosho';
+    const title = 'Horse';
     return (
         <section id="catalog-section">
 
@@ -11,7 +13,7 @@ export default function NoticeList() {
                 <ul className="list">
                     <li className="partialNotice">
                         <div className="f-right">
-                            <Link className="action pad-small f-left">See details</Link>
+                            <Link to={`/notice/123`} className="action pad-small f-left">See details</Link>
                         </div>
                         <p className="message"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, ab quibusdam animi nemo, et incidunt
                             molestiae unde modi laboriosam velit dignissimos dolorum blanditiis laborum quasi veritatis corporis
@@ -23,11 +25,11 @@ export default function NoticeList() {
                         </div>
                         <p className="message">Lorem ipsum dolor sit amet.</p>
                     </li>
-                    <li class="partialNotice">
+                    <li className="partialNotice">
                         <div className="f-right">
                             <Link className="action pad-small f-left">See details</Link>
                         </div>
-                        <p className="message">Message from Gosho: Lorem ipsum dolor sit amet consectetur.</p>
+                        <p className="message">{user} comment {title}: Lorem ipsum dolor sit amet consectetur.</p>
                     </li>
                     <li className="partialNotice">
                         <div className="f-right">

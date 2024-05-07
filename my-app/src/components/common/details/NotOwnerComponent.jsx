@@ -6,6 +6,7 @@ import { formHandller } from '../../../services/utility';
 
 import { makeOffer, selectItemsError, cleanErrorFromCatalog} from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+import { Link } from 'react-router-dom';
 
 export default function NotOwner({ item, user }) {
     const dispatch = useDispatch();
@@ -55,6 +56,9 @@ export default function NotOwner({ item, user }) {
 
             <h1 className="item">
                 {title}
+                <div className="f-right">
+                    <Link  className="action pad-small f-left" >Comment</Link>
+                </div>
             </h1>
             <div className="item padded">
 

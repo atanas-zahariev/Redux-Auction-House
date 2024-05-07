@@ -47,6 +47,7 @@ function App() {
             <Route path='/create' element={<CreateItem />} />
             <Route path='/edit/:id' element={<Edit />} />
             <Route path='/notice' element={<NoticeList />} />
+            <Route path='/notice/:id' element={<RecivedNotices />} />
           </Route>
 
           <Route path='/login' element={<Login />} />

@@ -23,6 +23,7 @@ import CreateItem from './components/action/CreateComponent';
 
 import { AuthGuard } from './guards/UserGuard';
 import RecivedNotices from './components/common/notice/RecivedNotice';
+import NoticeList from './components/common/notice/NoticeList';
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
             <Route path='/closed' element={<UserClosedOffers />} />
             <Route path='/create' element={<CreateItem />} />
             <Route path='/edit/:id' element={<Edit />} />
-            <Route path='/notice' element={<RecivedNotices />} />
+            <Route path='/notice' element={<NoticeList />} />
           </Route>
 
           <Route path='/login' element={<Login />} />

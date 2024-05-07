@@ -78,3 +78,34 @@
     width: 100%;
     resize: vertical;
 }
+
+/* noticeList */
+
+
+.partialNotice {
+    list-style: none;
+    border-bottom: 1px solid black;
+    padding: 8px 16px;
+    max-height: 50px;
+}
+
+p.message{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+    padding: 8px 4px;
+}
+
+.partialNotice:last-child{
+    border-bottom: none;
+}
+
+.list {
+    display: block;
+    max-width: 85%;
+    padding: 0px;
+    margin: 24px auto;
+    border: 1px solid black;
+    border-radius: 2px;
+}

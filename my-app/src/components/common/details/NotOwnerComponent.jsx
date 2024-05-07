@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { formHandller } from '../../../services/utility';
 
-import { makeOffer, selectItemsError, cleanErrorFromCatalog} from '../../../slices/itemsSlice';
+import { makeOffer, selectItemsError, cleanErrorFromCatalog, setErrorToCatalog } from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 import { Link } from 'react-router-dom';
 
@@ -34,6 +34,10 @@ export default function NotOwner({ item, user }) {
     const isBider = bider?._id === currentUser;
 
 
+    function sendComment() {
+        dispatch(setErrorToCatalog(["Comment", item, user]));
+    }
+
     const setBider = async (data) => {
         data.oldPrice = price;
         data.price = Number(data.price);
@@ -42,9 +46,9 @@ export default function NotOwner({ item, user }) {
 
         if (result.error) {
             return;
-        }else{
-            if(itemsError){
-             dispatch(cleanErrorFromCatalog());
+        } else {
+            if (itemsError) {
+                dispatch(cleanErrorFromCatalog());
             }
         }
     };
@@ -57,7 +61,7 @@ export default function NotOwner({ item, user }) {
             <h1 className="item">
                 {title}
                 <div className="f-right">
-                    <Link  className="action pad-small f-left" >Comment</Link>
+                    <Link onClick={sendComment} className="action pad-small f-left" >Comment</Link>
                 </div>
             </h1>
             <div className="item padded">

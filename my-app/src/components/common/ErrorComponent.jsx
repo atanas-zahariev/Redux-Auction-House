@@ -2,7 +2,7 @@
 /* eslint-disable no-inner-declarations */
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { clearUser } from '../../services/utility';
 
@@ -17,19 +17,36 @@ export default function Error({ error }) {
 
     useEffect(() => {
         // In case someone manipulates localStorage to make a request with a fake token.
-        if(error[0] === 'Invalid authorization token'){
+        if (error[0] === 'Invalid authorization token') {
             clearUser();
             dispatch(setPersistedStateToNull());
             dispatch(getItems());
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function cancelDelete() {
         dispatch(cleanErrorFromCatalog());
     }
 
+    if (Array.isArray(error) && error.includes('Comment')) {
 
+        console.log(error)
+
+        return (
+            <div className="error-box">
+                <form className="noticeForm">
+                    <label>
+                        <textarea name="description" placeholder="write your answer here..."></textarea>
+                    </label>
+                    <div className="align-center">
+                        <input type="submit" value="Send" />
+                    </div>
+                </form>
+            </div>
+        );
+
+    }
     if (Array.isArray(error)) {
         return (
             <div className="error-box">

@@ -13,6 +13,19 @@ const initialState = noticeAdapter.getInitialState({
     error: null
 });
 
+export const getNotification = createAsyncThunk(
+    'notice/fetchNotice',
+    async (id ,{ rejectWithValue }) => {
+        try {
+            const result = await getNotice(id);
+            console.log(result);
+            return result;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
 const noticesSlice = createSlice({
     name: 'notification',
     initialState,

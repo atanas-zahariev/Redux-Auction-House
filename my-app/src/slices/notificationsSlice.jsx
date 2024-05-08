@@ -48,3 +48,5 @@ const noticesSlice = createSlice({
 });
 
 export default noticesSlice.reducer;
+
+export const {selectAll: selectNotices,selectById: selectNoticeById} = noticeAdapter.getSelectors(state => state.notifications);

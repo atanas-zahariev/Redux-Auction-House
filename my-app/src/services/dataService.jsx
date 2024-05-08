@@ -46,7 +46,7 @@ export const api = () => {
     }
 
     async function getAllNotices() {
-        const result = await get(endpoints.getAllNotices());
+        const result = await get(endpoints.getAllNotices);
         return result;
     }
 

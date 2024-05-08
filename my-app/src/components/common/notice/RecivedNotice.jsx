@@ -1,6 +1,15 @@
-import { Link } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-restricted-imports */
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { selectNoticeById } from '../../../slices/notificationsSlice';
 
 export default function RecivedNotices() {
+    const {id} = useParams();
+
+    const notice = useSelector(state => selectNoticeById(state,id));
+
+    console.log(notice);
+
     return (
         <section id="catalog-section">
 

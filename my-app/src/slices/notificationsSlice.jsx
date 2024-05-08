@@ -27,7 +27,7 @@ export const getNotifications = createAsyncThunk(
 );
 
 const noticesSlice = createSlice({
-    name: 'notification',
+    name: 'notifications',
     initialState,
     reducers: {
 

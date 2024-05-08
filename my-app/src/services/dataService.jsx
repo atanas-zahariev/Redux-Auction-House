@@ -18,7 +18,8 @@ export const api = () => {
         createNot: '/notification/createNotice',
         getNotice: '/notification/notice/',
         getAllNotices: '/notification/notices',
-        deleteNotice: '/notification//notice/'
+        deleteNotice: '/notification/notice/',
+        editNotice: '/notification/editNotice/'
     };
 
     async function login(data) {
@@ -63,6 +64,11 @@ export const api = () => {
         const result = await post(endpoints.edit + id, data);
         return result;
     };
+
+    async function editNotice(data,id){
+        const result = await post (endpoints.editNotice +id);
+        return result;
+    }
 
     async function addInSystem(data) {
         const result = await post(endpoints.addInSysten, data);
@@ -118,6 +124,7 @@ export const api = () => {
         createNotification,
         getAllNotices,
         getNotice,
-        deleteNotice
+        deleteNotice,
+        editNotice
     };
 };

@@ -35,7 +35,7 @@ export default function NotOwner({ item, user }) {
 
 
     function sendComment() {
-        dispatch(setErrorToCatalog(["Comment", item, user]));
+        dispatch(setErrorToCatalog(['Comment', item, user]));
     }
 
     const setBider = async (data) => {

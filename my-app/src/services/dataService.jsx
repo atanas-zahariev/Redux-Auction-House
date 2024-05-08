@@ -17,7 +17,8 @@ export const api = () => {
         action: '/house/userAction/',
         createNot: '/notification/createNotice',
         getNotice: '/notification/notice/',
-        getAllNotices:'/notification/notices'
+        getAllNotices: '/notification/notices',
+        deleteNotice: '/notification//notice/'
     };
 
     async function login(data) {
@@ -43,7 +44,7 @@ export const api = () => {
         return result;
     }
 
-    async function getAllNotices(){
+    async function getAllNotices() {
         const result = await get(endpoints.getAllNotices());
         return result;
     }
@@ -83,6 +84,10 @@ export const api = () => {
         return result;
     }
 
+    async function deleteNotice(id) {
+        await get(endpoints.deleteNotice + id);
+    }
+
     async function makeAction(specificId) {
         const result = await post({ specificId });
         return result;
@@ -112,6 +117,7 @@ export const api = () => {
         getUserAction,
         createNotification,
         getAllNotices,
-        getNotice
+        getNotice,
+        deleteNotice
     };
 };

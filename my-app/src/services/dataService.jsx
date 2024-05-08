@@ -16,7 +16,8 @@ export const api = () => {
         closed: '/house/closed',
         action: '/house/userAction/',
         createNot: '/notification/createNotice',
-        getNotice: '/notification/notice/'
+        getNotice: '/notification/notice/',
+        getAllNotices:'/notification/notices'
     };
 
     async function login(data) {
@@ -39,6 +40,11 @@ export const api = () => {
 
     async function getAllDataInSystem(signal) {
         const result = await get(endpoints.getAllDataInSistem, undefined, signal);
+        return result;
+    }
+
+    async function getAllNotices(){
+        const result = await get(endpoints.getAllNotices());
         return result;
     }
 
@@ -105,6 +111,7 @@ export const api = () => {
         getTotalAction,
         getUserAction,
         createNotification,
+        getAllNotices,
         getNotice
     };
 };

@@ -9,6 +9,6 @@ export const store = configureStore({
   reducer:{
     user : userReducer,
     items: itemsReducer,
-    nnotifications : noticesReducer
+    notifications : noticesReducer
   }
 });

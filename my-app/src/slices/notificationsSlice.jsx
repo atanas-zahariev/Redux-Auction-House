@@ -37,7 +37,10 @@ const noticesSlice = createSlice({
         builder
             .addCase(getNotifications.fulfilled, (state, action) => {
                 state.status = 'fetchNoticesSucceeded';
-                console.log(action.payload);
+                noticeAdapter.addMany(state, action.payload.map(notice => {
+                   notice.type = 'notice';
+                   return makeCorrectIdForRedux(notice);
+                }));
             })
             .addCase(getNotifications.rejected, (state, action) => {
                 state.status = 'fetchNoticesFaild';
@@ -49,4 +52,4 @@ const noticesSlice = createSlice({
 
 export default noticesSlice.reducer;
 
-export const {selectAll: selectNotices,selectById: selectNoticeById} = noticeAdapter.getSelectors(state => state.notifications);
+export const { selectAll: selectNotices, selectById: selectNoticeById } = noticeAdapter.getSelectors(state => state.notifications);

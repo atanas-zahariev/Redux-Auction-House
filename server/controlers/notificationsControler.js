@@ -63,7 +63,7 @@ notificationsControler.post('/editNotice/:id', async (req, res) => {
      }
 })
 
-notificationsControler.get('notice/:id', async (req ,res) => {
+notificationsControler.get('/notice/:id', async (req ,res) => {
     try {
         await deleteNotification(req.params.id);
     } catch (error) {

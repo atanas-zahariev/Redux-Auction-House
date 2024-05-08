@@ -12,3 +12,11 @@ const initialState = noticeAdapter.getInitialState({
     status: 'idle',
     error: null
 });
+
+const noticesSlice = createSlice({
+    name: 'notification',
+    initialState,
+    reducers: {
+
+    }
+});

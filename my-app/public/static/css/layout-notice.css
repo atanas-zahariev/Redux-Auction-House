@@ -3,7 +3,7 @@
 
 
 .notice {
-    margin: 84px auto;
+    margin:auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -41,16 +41,22 @@
 }
 
 .noticeImg {
-    max-width: 400px;
-    aspect-ratio: 1/1;
+    width: 400px;
+    aspect-ratio: auto;
     overflow: hidden;
 }
 
 .noticeImg img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 300ms ease-in-out;
 }
+
+.noticeImg img:hover {
+    transform: scale(1.5);
+  }
 
 .noticeForm input {
     background-color: #7d367d;

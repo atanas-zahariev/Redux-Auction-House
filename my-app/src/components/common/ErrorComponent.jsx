@@ -31,16 +31,16 @@ export default function Error({ error }) {
 
     if (Array.isArray(error) && error.includes('Comment')) {
 
-        console.log(error)
+        console.log(error);
 
         return (
             <div className="error-box">
-                <form className="noticeForm">
+                <form id='delete' className="noticeForm" style={{padding:'18px'}}>
                     <label>
-                        <textarea name="description" placeholder="write your answer here..."></textarea>
+                        <textarea name="description" placeholder="write your message..." style={{margin:'0px',width:'350px',height:'64px'}}></textarea>
                     </label>
-                    <div className="align-center">
-                        <input type="submit" value="Send" />
+                    <div className="align-center" >
+                        <input type="submit" value="Send Message" />
                     </div>
                 </form>
             </div>

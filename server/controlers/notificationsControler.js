@@ -76,5 +76,14 @@ notificationsControler.get('/getOwner', async (req, res) => {
     }
 })
 
+notificationsControler.get('/notice/:id', async (req ,res) => {
+    try {
+        await deleteNotification(req.params.id);
+    } catch (error) {
+        const message = errorParser(error);
+        res.status(400).json(message);
+    }
+})
+
 
 module.exports = notificationsControler;

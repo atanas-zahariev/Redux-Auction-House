@@ -3,7 +3,7 @@
 
 
 .notice {
-    margin: 84px auto;
+    margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -40,16 +40,22 @@
     background-color: #e4e7e4;
 }
 
-.noticeImg {
-    max-width: 400px;
-    aspect-ratio: 1/1;
+.noticeSection{
     overflow: hidden;
 }
 
-.noticeImg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+.imgContainer {
+    max-width: 400px;
+}
+
+.noticeImg {
+    max-width: 400px;
+    transition: transform 300ms ease-in-out;
+}
+
+.noticeImg:hover {
+    transform: scale(1.5);
 }
 
 .noticeForm input {
@@ -89,7 +95,7 @@
     max-height: 50px;
 }
 
-p.message{
+p.message {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -97,7 +103,7 @@ p.message{
     padding: 8px 4px;
 }
 
-.partialNotice:last-child{
+.partialNotice:last-child {
     border-bottom: none;
 }
 

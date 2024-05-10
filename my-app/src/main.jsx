@@ -10,10 +10,13 @@ import './index.css';
 
 import { store } from './app/store';
 import { getItems } from './slices/itemsSlice';
+import { getNotifications } from './slices/notificationsSlice';
 
 async function fetchItemBeforeRender(){
   
   await store.dispatch(getItems());
+
+  await store.dispatch(getNotifications());
   
   const container = document.getElementById('root');
   

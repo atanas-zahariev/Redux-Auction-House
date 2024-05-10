@@ -16,7 +16,10 @@ export const api = () => {
         closed: '/house/closed',
         action: '/house/userAction/',
         createNot: '/notification/createNotice',
-        getNotice: '/notification/notice/'
+        getNotice: '/notification/notice/',
+        getAllNotices: '/notification/notices',
+        deleteNotice: '/notification/notice/',
+        editNotice: '/notification/editNotice/'
     };
 
     async function login(data) {
@@ -42,6 +45,11 @@ export const api = () => {
         return result;
     }
 
+    async function getAllNotices() {
+        const result = await get(endpoints.getAllNotices);
+        return result;
+    }
+
     async function getSpecificDataWithId(id) {
         const result = await get(endpoints.getSpecificDataWithId + id);
         return result;
@@ -56,6 +64,11 @@ export const api = () => {
         const result = await post(endpoints.edit + id, data);
         return result;
     };
+
+    async function editNotice(data,id){
+        const result = await post (endpoints.editNotice +id);
+        return result;
+    }
 
     async function addInSystem(data) {
         const result = await post(endpoints.addInSysten, data);
@@ -75,6 +88,10 @@ export const api = () => {
     async function onDelete(id) {
         const result = await get(endpoints.delete + id);
         return result;
+    }
+
+    async function deleteNotice(id) {
+        await get(endpoints.deleteNotice + id);
     }
 
     async function makeAction(specificId) {
@@ -105,6 +122,9 @@ export const api = () => {
         getTotalAction,
         getUserAction,
         createNotification,
-        getNotice
+        getAllNotices,
+        getNotice,
+        deleteNotice,
+        editNotice
     };
 };

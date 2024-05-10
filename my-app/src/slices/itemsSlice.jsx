@@ -6,7 +6,7 @@ import { api } from '../services/dataService';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem, getNotice } = api();
+const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem } = api();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -20,18 +20,7 @@ export const getItems = createAsyncThunk(
     }
 );
 
-export const getNotification = createAsyncThunk(
-    'notice/fetchNotice',
-    async (id ,{ rejectWithValue }) => {
-        try {
-            const result = await getNotice(id);
-            console.log(result);
-            return result;
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
+
 
 export const createItem = createAsyncThunk(
     'items/createItem',
@@ -225,10 +214,8 @@ const itemsSlice = createSlice({
                 state.status = 'createItemSucceeded';
 
                 state.error = action.payload;
-            })
-            .addCase(getNotification.fulfilled, (state, action) => {
-                console.log(action.payload);
             });
+            
 
     }
 });

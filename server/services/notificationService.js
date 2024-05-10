@@ -1,4 +1,5 @@
 const Notifications = require('../models/Notifications');
+const { Schema, model, Types } = require('mongoose');
 
 
 async function getAllNotifications() {
@@ -29,10 +30,94 @@ async function deleteNotification(id) {
     await Notifications.findByIdAndDelete(id);
 }
 
+async function getOwner(id) {
+    // const result = await Notifications.aggregate([
+    //     {
+    //         $match: {
+    //             "product": new Types.ObjectId(id)
+    //         }
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "items", // колекцията с продукти
+    //             localField: "product",
+    //             foreignField: "_id",
+    //             as: "product"
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$product"
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "users", // колекцията с потребители (собственици на продуктите)
+    //             localField: "product.owner",
+    //             foreignField: "_id",
+    //             as: "owner"
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$owner"
+    //     },
+    //     {
+    //         $project: {
+    //             _id: 1,
+    //             // message: 1,
+    //             owner: "$owner" // връщаме собственика на продукта
+    //         }
+    //     }
+    // ]);
+
+    const result = await Notifications.aggregate([
+        {
+            $lookup: {
+                from: "items",
+                localField: "product",
+                foreignField: "_id",
+                as: "product"
+            }
+        },
+        {
+            $unwind: "$product"
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "product.owner",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $unwind: "$owner"
+        },
+        {
+            $addFields: {
+                "ownerId": "$owner._id" // добавяме поле с ID на собственика
+            }
+        },
+        {
+            $match: {
+                "ownerId": new Types.ObjectId(id) // филтрираме по ID на собственика
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                // message: 1,
+                owner: "$owner"
+            }
+        }
+    ]);
+
+    return result;
+}
+
 module.exports = {
-  getAllNotifications,
-  getNotificationById,
-  createNotification,
-  editNotification,
-  deleteNotification
+    getAllNotifications,
+    getNotificationById,
+    createNotification,
+    editNotification,
+    deleteNotification,
+    getOwner
 }

@@ -6,7 +6,7 @@ import { api } from '../services/dataService';
 
 const noticeAdapter = createEntityAdapter();
 
-const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice } = api();
+const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice, getOwner } = api();
 
 const initialState = noticeAdapter.getInitialState({
     status: 'idle',
@@ -24,6 +24,19 @@ export const getNotifications = createAsyncThunk(
         }
     }
 );
+
+export const answerNotice = createAsyncThunk(
+    'notice/fetchAnswer',
+    async (_, { rejectWithValue }) => {
+        try {
+            const result = await getOwner();
+            return result;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
 
 const noticesSlice = createSlice({
     name: 'notifications',

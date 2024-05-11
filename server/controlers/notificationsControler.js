@@ -65,10 +65,9 @@ notificationsControler.post('/editNotice/:id', async (req, res) => {
 })
 
 notificationsControler.get('/getOwner', async (req, res) => {
-    const { id } = req.body
-    console.log(id);
+
     try {
-        const result = await getOwner(id)
+        const result = await getOwner(req.user._id)
         res.json(result)
     } catch (error) {
         const message = errorParser(error);

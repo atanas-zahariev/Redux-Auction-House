@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectNotices } from '../../../slices/notificationsSlice';
+import { getAnswers, selectNotices } from '../../../slices/notificationsSlice';
 import { selectUserFromCatalog } from '../../../slices/itemsSlice';
 
 export default function NoticeList() {
     const notices = useSelector(state => selectNotices(state));
     const currentuser = useSelector(state => selectUserFromCatalog(state));
-
+    const answers = useSelector(state => getAnswers(state));
     const userNotice = notices.filter(notice => notice.product.owner === currentuser.id);
-    console.log(userNotice);
     return (
         <section id="catalog-section">
 

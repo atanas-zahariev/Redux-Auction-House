@@ -19,7 +19,8 @@ export const api = () => {
         getNotice: '/notification/notice/',
         getAllNotices: '/notification/notices',
         deleteNotice: '/notification/notice/',
-        editNotice: '/notification/editNotice/'
+        editNotice: '/notification/editNotice/',
+        getNoticeOwner: '/getOwner'
     };
 
     async function login(data) {
@@ -65,8 +66,8 @@ export const api = () => {
         return result;
     };
 
-    async function editNotice(data,id){
-        const result = await post (endpoints.editNotice +id);
+    async function editNotice(data, id) {
+        const result = await post(endpoints.editNotice + id);
         return result;
     }
 
@@ -108,7 +109,11 @@ export const api = () => {
         const result = await get(endpoints.action + id);
         return result;
     }
-
+    
+    async function getOwner() {
+        const result = await get(endpoints.getNoticeOwner);
+        return result;
+    }
     return {
         login,
         register,
@@ -125,6 +130,7 @@ export const api = () => {
         getAllNotices,
         getNotice,
         deleteNotice,
-        editNotice
+        editNotice,
+        getOwner
     };
 };

@@ -66,7 +66,7 @@ const noticesSlice = createSlice({
             })
             .addCase(answerNotice.rejected, (state, action) => {
                 state.status = 'fetchAnswersFaild';
-                
+
                 state.error = action.payload;
             });
     }
@@ -75,3 +75,5 @@ const noticesSlice = createSlice({
 export default noticesSlice.reducer;
 
 export const { selectAll: selectNotices, selectById: selectNoticeById } = noticeAdapter.getSelectors(state => state.notifications);
+
+export const getAnswers = state => state.notifications.answers;

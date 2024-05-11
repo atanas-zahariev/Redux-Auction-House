@@ -9,6 +9,12 @@ const notificationsSchema = new Schema({
         maxLength: [200, 'Your message must be at most 200 characters.']
     },
 
+    answer: {
+        type: String,
+        minLength: [3, 'Your message must be at least 3 characters.'],
+        maxLength: [200, 'Your message must be at most 200 characters.']
+    },
+
     product: { type: Types.ObjectId, ref: 'Item', required: true },
 
     user: { type: Types.ObjectId, ref: 'User', required: true }

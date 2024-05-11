@@ -23,7 +23,7 @@ export default function NoticeList() {
                                 <div className="f-right">
                                     <Link to={`/notice/${notice.id}`} className="action pad-small f-left">See details</Link>
                                 </div>
-                                <p className="message">From: {notice.user.firstname} {notice.user.lastname}. For - {notice.product.title}: {notice.message}</p>
+                                <p className="message">From: {notice.user.firstname} {notice.user.lastname}. For - {notice.product.title}</p>
                             </li>)}
                     </ul> :
                     <div className="item pad-large align-center">

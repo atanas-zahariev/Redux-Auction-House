@@ -30,12 +30,14 @@ export default function Error({ error }) {
     }
 
     if (Array.isArray(error) && error.includes('Comment')) {
-
         console.log(error);
+        async function sendMessage(){
+
+        }
 
         return (
             <div className="error-box">
-                <form id='delete' className="noticeForm" style={{padding:'18px'}}>
+                <form id='delete' className="noticeForm" style={{padding:'18px'}} onSubmit={sendMessage}>
                     <label>
                         <textarea name="description" placeholder="write your message..." style={{margin:'0px',width:'350px',height:'64px'}}></textarea>
                     </label>

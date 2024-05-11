@@ -15,10 +15,9 @@ const initialState = noticeAdapter.getInitialState({
 
 export const getNotifications = createAsyncThunk(
     'notice/fetchNotice',
-    async (id, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const result = await getAllNotices();
-            console.log(result);
             return result;
         } catch (error) {
             return rejectWithValue(error);
@@ -38,8 +37,8 @@ const noticesSlice = createSlice({
             .addCase(getNotifications.fulfilled, (state, action) => {
                 state.status = 'fetchNoticesSucceeded';
                 noticeAdapter.addMany(state, action.payload.map(notice => {
-                   notice.type = 'notice';
-                   return makeCorrectIdForRedux(notice);
+                    notice.type = 'notice';
+                    return makeCorrectIdForRedux(notice);
                 }));
             })
             .addCase(getNotifications.rejected, (state, action) => {

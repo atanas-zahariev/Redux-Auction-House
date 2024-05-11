@@ -20,7 +20,7 @@ export const api = () => {
         getAllNotices: '/notification/notices',
         deleteNotice: '/notification/notice/',
         editNotice: '/notification/editNotice/',
-        getNoticeOwner: '/getOwner'
+        getNoticeOwner: '/notification/getOwner'
     };
 
     async function login(data) {

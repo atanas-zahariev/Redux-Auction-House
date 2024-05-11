@@ -10,7 +10,8 @@ const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice, 
 
 const initialState = noticeAdapter.getInitialState({
     status: 'idle',
-    error: null
+    error: null,
+    answers: null
 });
 
 export const getNotifications = createAsyncThunk(
@@ -57,6 +58,15 @@ const noticesSlice = createSlice({
             .addCase(getNotifications.rejected, (state, action) => {
                 state.status = 'fetchNoticesFaild';
 
+                state.error = action.payload;
+            })
+            .addCase(answerNotice.fulfilled, (state, action) => {
+                state.status = 'fetchAnswersSucceeded';
+                console.log(action.payload);
+            })
+            .addCase(answerNotice.rejected, (state, action) => {
+                state.status = 'fetchAnswersFaild';
+                
                 state.error = action.payload;
             });
     }

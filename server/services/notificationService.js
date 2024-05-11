@@ -1,5 +1,5 @@
+const { Types } = require('mongoose');
 const Notifications = require('../models/Notifications');
-const { Schema, model, Types } = require('mongoose');
 
 
 async function getAllNotifications() {
@@ -24,6 +24,21 @@ async function editNotification(data, id) {
     existing.message = data.message;
 
     return await existing.save();
+}
+
+async function setAnswer(data, id) {
+    const notice = await Notifications.findById(id);
+    if (!notice.answers) {
+        const userAnswers = new Map()
+        userAnswers.set(data.user, data)
+
+        notice.answers = userAnswers;
+
+        return await notice.save();
+    } else {
+        notice.answers.set(data.user, data);
+        return await notice.save();
+    }
 }
 
 async function deleteNotification(id) {
@@ -104,8 +119,43 @@ async function getOwner(id) {
         {
             $project: {
                 _id: 1,
-                // message: 1,
+                answers: 1,
                 owner: "$owner"
+            }
+        },
+        {
+            $addFields: {
+                "answersArray": { $objectToArray: "$answers" } // преобразуваме Map в масив от обекти
+            }
+        },
+        {
+            $unwind: "$answersArray"
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "answersArray.v.user",
+                foreignField: "_id",
+                as: "populatedAnswers"
+            }
+        },
+        {
+            $addFields: {
+                "answersArray.v.user": { $arrayElemAt: ["$populatedAnswers", 0] } // присвояваме потребителските данни на съответното поле "user"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                answers: { $push: "$answersArray.v" }, // създаваме отново Map от масива с присвоените потребителски данни
+                owner: { $first: "$owner" }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                answers: 1,
+                owner: 1
             }
         }
     ]);
@@ -119,5 +169,6 @@ module.exports = {
     createNotification,
     editNotification,
     deleteNotification,
-    getOwner
+    getOwner,
+    setAnswer
 }

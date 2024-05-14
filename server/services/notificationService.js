@@ -1,9 +1,30 @@
 const { Types } = require('mongoose');
 const Notifications = require('../models/Notifications');
+const User = require("../models/User")
+
 
 
 async function getAllNotifications() {
-    const notifications = await Notifications.find({}).populate('user').populate('product').lean();
+    const notifications = await Notifications.find({})
+        .populate('user')
+        .populate('product')
+        .populate({
+            path: 'product',
+            populate: {
+                path: 'owner', 
+                model: 'User'
+            }
+        })
+        .lean();
+
+        for (const notification of notifications) {
+            const answers = Object.values(notification.answers); 
+        
+            await Promise.all(answers.map(async answer => {
+                answer.user = await User.findById(answer.user); 
+            }));
+        }
+        
     return notifications;
 }
 

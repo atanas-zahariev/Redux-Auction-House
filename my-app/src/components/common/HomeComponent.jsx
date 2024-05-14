@@ -40,6 +40,8 @@ export default function Home() {
                         <div className="align-center">
                             <Link className="action" to="/catalog">Browse Listings</Link>
                             <Link className="action" to="/create">Publish Auction</Link>
+                            <Link className="action" to="/notice">Notifications</Link>
+
                         </div>
                     </div>
                 </div>

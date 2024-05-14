@@ -6,12 +6,11 @@ import { api } from '../services/dataService';
 
 const noticeAdapter = createEntityAdapter();
 
-const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice, getOwner } = api();
+const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice } = api();
 
 const initialState = noticeAdapter.getInitialState({
     status: 'idle',
     error: null,
-    answers: null
 });
 
 export const getNotifications = createAsyncThunk(
@@ -26,17 +25,6 @@ export const getNotifications = createAsyncThunk(
     }
 );
 
-export const answerNotice = createAsyncThunk(
-    'notice/fetchAnswer',
-    async (_, { rejectWithValue }) => {
-        try {
-            const result = await getOwner();
-            return result;
-        } catch (error) {
-            return rejectWithValue(error);
-        }
-    }
-);
 
 
 const noticesSlice = createSlice({
@@ -59,15 +47,6 @@ const noticesSlice = createSlice({
                 state.status = 'fetchNoticesFaild';
 
                 state.error = action.payload;
-            })
-            .addCase(answerNotice.fulfilled, (state, action) => {
-                state.status = 'fetchAnswersSucceeded';
-                console.log(action.payload);
-            })
-            .addCase(answerNotice.rejected, (state, action) => {
-                state.status = 'fetchAnswersFaild';
-
-                state.error = action.payload;
             });
     }
 });
@@ -75,5 +54,3 @@ const noticesSlice = createSlice({
 export default noticesSlice.reducer;
 
 export const { selectAll: selectNotices, selectById: selectNoticeById } = noticeAdapter.getSelectors(state => state.notifications);
-
-export const getAnswers = state => state.notifications.answers;

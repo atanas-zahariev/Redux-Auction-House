@@ -1,8 +1,11 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
+const commentSchema = new Schema({
+    comment: { type: Types.ObjectId, ref: 'Notifications', required: true },
+    fromUser:{ type: Types.ObjectId, ref: 'User', required: true }
+})
 
 const userSchema = new Schema({
-
     email: {
         type: String,
         required: true,
@@ -22,7 +25,11 @@ const userSchema = new Schema({
     hashedPassword: {
         type: String,
         required: true,
-    }
+    },
+
+    comments: [
+        commentSchema
+    ]
 });
 
 userSchema.index({ username: 1 }, {

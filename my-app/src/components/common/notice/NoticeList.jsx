@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { answerNotice, getAnswers, selectNotices } from '../../../slices/notificationsSlice';
+import {  selectNotices } from '../../../slices/notificationsSlice';
 import { selectUserFromCatalog } from '../../../slices/itemsSlice';
-import { useEffect } from 'react';
 
 export default function NoticeList() {
-    const dispatch = useDispatch();
     const notices = useSelector(state => selectNotices(state));
     const currentuser = useSelector(state => selectUserFromCatalog(state));
-    const answers = useSelector(state => getAnswers(state));
-    console.log(answers);
+    console.log(notices);
 
-    useEffect(() => {
-        dispatch(answerNotice());
-    });
-    const userNotice = notices.filter(notice => notice.product.owner === currentuser.id);
+    const userNotice = notices.filter(notice => notice.product.owner._id === currentuser.id);
     return (
         <section id="catalog-section">
 

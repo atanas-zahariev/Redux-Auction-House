@@ -32,10 +32,6 @@ export default function Header() {
                             <Link to="/closed">Closed Auctions</Link>
                         </li>
 
-                        <li>
-                            <Link to="/notice">Notifications</Link>
-                        </li>
-
                         <li className="user">
                             <Link to="/logout">Logout</Link>
                         </li>

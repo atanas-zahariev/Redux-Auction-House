@@ -1,4 +1,4 @@
-const { register, login, logout } = require('../services/userService');
+const { register, login, logout, setNotice } = require('../services/userService');
 const errorParser = require('../utyl/parser');
 const { body, validationResult } = require('express-validator');
 
@@ -28,9 +28,9 @@ authControler.post('/register',
                 throw new Error('Passwords don\'t match');
             }
 
-            const {token,user} = await register(email, firstname, lastname, password);
+            const { token, user } = await register(email, firstname, lastname, password);
 
-            res.json({token,user});
+            res.json({ token, user });
 
         } catch (error) {
             const message = errorParser(error);
@@ -56,5 +56,19 @@ authControler.get('/logout', async (req, res) => {
     await logout(token);
     res.status(204).end();
 });
+
+// notices ->
+
+authControler.post('/setNotice', async (req, res) => {
+    const { data, id, userComment, currentUserComment } = req.body;
+
+    try {
+        await setNotice(data, id, userComment, currentUserComment)
+        res.end()
+    } catch (error) {
+        const message = errorParser(error);
+        res.status(400).json(message);
+    }
+})
 
 module.exports = authControler;

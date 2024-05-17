@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
 import {  useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {  selectNotices } from '../../../slices/notificationsSlice';
 import { selectUserFromCatalog } from '../../../slices/itemsSlice';
 
 export default function NoticeList() {
-    const notices = useSelector(state => selectNotices(state));
-    const currentuser = useSelector(state => selectUserFromCatalog(state));
-    console.log(notices);
-
-    const userNotice = notices.filter(notice => notice.product.owner._id === currentuser.id);
+    const userNotice = useSelector(state => selectUserFromCatalog(state));
+    console.log(userNotice.notices);
     return (
         <section id="catalog-section">
 
@@ -34,7 +30,7 @@ export default function NoticeList() {
 
             <div className="item padded">
                 <footer>
-                    <div>Listed by {currentuser.firstname} </div>
+                    {/* <div>Listed by {currentuser.firstname} </div> */}
                 </footer>
 
             </div>

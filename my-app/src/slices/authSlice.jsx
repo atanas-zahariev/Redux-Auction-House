@@ -103,6 +103,8 @@ export default userSlice.reducer;
 
 export const { cleanAuthError, setUpUser, setPersistedStateToNull } = userSlice.actions;
 
+export const { selectById: selectUserBiId, selectAll: selectAllUsers } = userAdapter.getSelectors(state => state.user);
+
 export const selectUser = state => state.user;
 
 export const selectPersistedState = state => state.user.persistedState;

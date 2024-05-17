@@ -1,8 +1,18 @@
 const { Schema, model, Types } = require('mongoose');
 
-const commentSchema = new Schema({
-    comment: { type: Types.ObjectId, ref: 'Notifications', required: true },
-    fromUser:{ type: Types.ObjectId, ref: 'User', required: true }
+const conversationSchema = new Schema({
+    userComment: { type: String ,required: true},
+    currentUserComment: { type: String },
+})
+
+const noticeSchema = new Schema({
+    fromUser: {
+        type: Types.ObjectId, ref: 'User'
+    },
+    aboutProduct: {
+        type: Types.ObjectId, ref: 'Item'
+    },
+    conversation: [conversationSchema]
 })
 
 const userSchema = new Schema({
@@ -27,9 +37,7 @@ const userSchema = new Schema({
         required: true,
     },
 
-    comments: [
-        commentSchema
-    ]
+    notices: [noticeSchema]
 });
 
 userSchema.index({ username: 1 }, {

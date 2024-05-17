@@ -38,6 +38,13 @@ async function login(email, password) {
             path: 'fromUser',
             model: 'User'
         }
+    })
+    .populate({
+        path: 'notices',
+        populate: {
+            path: 'aboutProduct',
+            model: 'Item'
+        }
     }).lean();;
 
     if (!user) {

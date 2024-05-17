@@ -33,13 +33,13 @@ export function makeCorrectIdForRedux(data) {
         return { id, title, category, description, imgUrl, bider, owner, price, __v };
 
     } else if (data.type === 'user') {
-        const { _id: id, firstname, lastname, email } = data;
+        const { _id: id, firstname, lastname, email, notices } = data;
 
-        return { id, firstname, lastname, email };
+        return { id, firstname, lastname, email, notices };
     } else if (data.type === 'notice') {
-        const { _id: id, message, product, user ,answers} = data;
+        const { _id: id, message, product, user, answers } = data;
 
-        return { id, message, product, user,answers };
+        return { id, message, product, user, answers };
     }
 }
 

@@ -31,7 +31,14 @@ async function register(email, firstname, lastname, password) {
 };
 
 async function login(email, password) {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+    .populate({
+        path: 'notices',
+        populate: {
+            path: 'fromUser',
+            model: 'User'
+        }
+    }).lean();;
 
     if (!user) {
         throw new Error('Username or Password don\'t match')
@@ -55,7 +62,7 @@ async function logout(token) {
 };
 
 
-function createSession({ _id, firstname, lastname, email,notices }) {
+function createSession({ _id, firstname, lastname, email, notices }) {
     const payload = {
         _id,
         firstname,
@@ -87,15 +94,15 @@ async function setNotice(data, userId, userComment, currentUserComment) {
 
         data.conversation = [...newConversation]
     } else {
-         data.conversation.push({userComment, currentUserComment})
+        data.conversation.push({ userComment, currentUserComment })
     }
 
-    if(!user.notices){
+    if (!user.notices) {
         user.notices = new Array()
         user.notices.push(data);
 
         return await user.save();
-    }else{
+    } else {
         user.notices.push(data);
         return await user.save();
     }

@@ -8,6 +8,7 @@ export const api = () => {
         login: '/auth/login',
         register: '/auth/register',
         logout: '/auth/logout',
+        sendNotice: '/auth/setNotice',
         getAllDataInSistem: '/house/catalog',
         getSpecificDataWithId: '/house/details/',
         addInSysten: '/house/create',
@@ -27,6 +28,10 @@ export const api = () => {
         const result = await post(endpoints.login, data);
         setUser(result.token);
         return result.user;
+    }
+
+    async function sendNotice(data,){
+        await post(endpoints.sendNotice,data);
     }
 
     async function register(data) {
@@ -118,6 +123,7 @@ export const api = () => {
         login,
         register,
         logout,
+        sendNotice,
         getAllDataInSystem,
         getSpecificDataWithId,
         offer,

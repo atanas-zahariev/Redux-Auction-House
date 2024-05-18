@@ -1,7 +1,7 @@
 const { Schema, model, Types } = require('mongoose');
 
 const conversationSchema = new Schema({
-    userComment: { type: String ,required: true},
+    userComment: { type: String },
     currentUserComment: { type: String },
 })
 
@@ -12,7 +12,10 @@ const noticeSchema = new Schema({
     aboutProduct: {
         type: Types.ObjectId, ref: 'Item'
     },
-    conversation: [conversationSchema]
+    conversation: {
+        type: Map,
+        of: conversationSchema
+    }
 })
 
 const userSchema = new Schema({

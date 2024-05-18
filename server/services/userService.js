@@ -32,20 +32,20 @@ async function register(email, firstname, lastname, password) {
 
 async function login(email, password) {
     const user = await User.findOne({ email })
-    .populate({
-        path: 'notices',
-        populate: {
-            path: 'fromUser',
-            model: 'User'
-        }
-    })
-    .populate({
-        path: 'notices',
-        populate: {
-            path: 'aboutProduct',
-            model: 'Item'
-        }
-    }).lean();;
+        .populate({
+            path: 'notices',
+            populate: {
+                path: 'fromUser',
+                model: 'User'
+            }
+        })
+        .populate({
+            path: 'notices',
+            populate: {
+                path: 'aboutProduct',
+                model: 'Item'
+            }
+        }).lean();;
 
     if (!user) {
         throw new Error('Username or Password don\'t match')
@@ -92,26 +92,52 @@ function verifiToken(token) {
 
 // notices ->
 
-async function setNotice(data, userId, userComment, currentUserComment) {
-    const user = await User.findById(userId)
+async function setNotice(data, userId, userComment) {
+    const owner = await User.findById(userId)
+    const sender = await User.findById(data.fromUser);
 
     if (!data.conversation) {
-        const newConversation = new Array()
-        newConversation.push({ userComment, currentUserComment })
+        const newConversation = new Map()
+        newConversation.set(data.aboutProduct, { userComment })
 
-        data.conversation = [...newConversation]
+        data.conversation = newConversation
     } else {
-        data.conversation.push({ userComment, currentUserComment })
+        data.conversation.set(data.aboutProduct, { userComment })
     }
 
-    if (!user.notices) {
-        user.notices = new Array()
-        user.notices.push(data);
+    const comment = data.conversation.get(data.aboutProduct).userComment
 
-        return await user.save();
+    const senderConversation = new Map()
+
+    senderConversation.set(data.aboutProduct, {currentUserComment:comment});
+
+    const senderData = {
+       aboutProduct:data.aboutProduct,
+       conversation: senderConversation
+    }
+
+    if (!owner.notices) {
+        owner.notices = new Array()
+        owner.notices.push(data);
+
+        await owner.save();
     } else {
-        user.notices.push(data);
-        return await user.save();
+        owner.notices.push(data);
+        await owner.save();
+    }
+
+    if(!sender.notices){
+        sender.notices = new Array()
+        sender.notices.push(senderData)
+
+        await sender.save()
+
+        return sender.notices;
+    }else{
+        sender.notices.push(senderData)
+        await sender.save()
+
+        return sender.notices;
     }
 }
 

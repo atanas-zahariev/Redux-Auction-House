@@ -1,11 +1,27 @@
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-import {  useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectUserFromCatalog } from '../../../slices/itemsSlice';
+import { cleanErrorFromCatalog, selectItemsError, selectUserFromCatalog } from '../../../slices/itemsSlice';
+import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
+import { useEffect } from 'react';
 
 export default function NoticeList() {
+    const authError = useSelector(selectAuthError);
+    const itemsError = useSelector(selectItemsError);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (authError) {
+            dispatch(cleanAuthError());
+        }
+        if (itemsError) {
+            dispatch(cleanErrorFromCatalog());
+        }
+        // eslint-disable-next-line
+    }, []);
+
     const userNotice = useSelector(state => selectUserFromCatalog(state));
-    console.log(userNotice.notices);
+    // console.log(userNotice);
     return (
         <section id="catalog-section">
 

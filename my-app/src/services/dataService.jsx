@@ -30,8 +30,9 @@ export const api = () => {
         return result.user;
     }
 
-    async function sendNotice(data,){
-        await post(endpoints.sendNotice,data);
+    async function sendNotice(data,) {
+        const result = await post(endpoints.sendNotice, data);
+        return result;
     }
 
     async function register(data) {
@@ -114,7 +115,7 @@ export const api = () => {
         const result = await get(endpoints.action + id);
         return result;
     }
-    
+
     async function getOwner() {
         const result = await get(endpoints.getNoticeOwner);
         return result;

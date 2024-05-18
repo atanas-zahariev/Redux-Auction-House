@@ -4,7 +4,7 @@ import { getUser, makeCorrectIdForRedux, validator } from '../services/utility';
 
 import { api } from '../services/dataService';
 
-const { login, register, logout,sendNotice } = api();
+const { login, register, logout, sendNotice } = api();
 
 const userAdapter = createEntityAdapter();
 
@@ -46,9 +46,10 @@ export const logoutUser = createAsyncThunk(
 
 export const sendUserNotice = createAsyncThunk(
     'user/sendNotice',
-    async (data, {rejectWithValue}) => {
+    async (data, { rejectWithValue }) => {
         try {
-            await sendNotice(data);
+           const result =  await sendNotice(data);
+           return result;
         } catch (error) {
             return rejectWithValue(error);
         }
@@ -105,6 +106,15 @@ const userSlice = createSlice({
                 if (action.payload) {
                     userAdapter.removeOne(state, action.payload);
                 }
+            })
+            .addCase(sendUserNotice.fulfilled, (state, action) => {
+                state.status = 'sendUserNoticeSucceeded';
+                console.log(action.payload);
+            })
+            .addCase(sendUserNotice.rejected, (state, action) => {
+                state.status = 'sendUserNoticeFaild';
+
+                state.error = action.payload;
             });
     }
 });
@@ -121,4 +131,6 @@ export const selectUser = state => state.user;
 export const selectPersistedState = state => state.user.persistedState;
 
 export const selectAuthError = state => state.user.error;
+
+export const selectNotices = state => state.user.notices;
 

@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { clearUser } from '../../services/utility';
+import { clearUser, formHandller } from '../../services/utility';
 
-import { setPersistedStateToNull } from '../../slices/authSlice';
+import { sendUserNotice, setPersistedStateToNull } from '../../slices/authSlice';
 import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
 
 
@@ -30,16 +30,32 @@ export default function Error({ error }) {
     }
 
     if (Array.isArray(error) && error.includes('Comment')) {
-        console.log(error);
-        async function sendMessage(){
+        async function sendMessage(message) {
+            const id = error[1].owner;
+            const fromUser = error[2].id;
+            const aboutProduct = error[1].id;
+            const userComment = message.description;
+            const data = {
+                fromUser,
+                aboutProduct
+            };
+            
+            const result = await dispatch(sendUserNotice({ data, id, userComment }));
 
+            if (result.error) {
+                return;
+            } else {
+                navigate('/notice');
+            }
         }
+
+        const onSubmit = formHandller(sendMessage);
 
         return (
             <div className="error-box">
-                <form id='delete' className="noticeForm" style={{padding:'18px'}} onSubmit={sendMessage}>
+                <form id='delete' className="noticeForm" style={{ padding: '18px' }} onSubmit={onSubmit}>
                     <label>
-                        <textarea name="description" placeholder="write your message..." style={{margin:'0px',width:'350px',height:'64px'}}></textarea>
+                        <textarea name="description" placeholder="write your message..." style={{ margin: '0px', width: '350px', height: '64px' }}></textarea>
                     </label>
                     <div className="align-center" >
                         <input type="submit" value="Send Message" />

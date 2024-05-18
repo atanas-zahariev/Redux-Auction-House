@@ -60,11 +60,11 @@ authControler.get('/logout', async (req, res) => {
 // notices ->
 
 authControler.post('/setNotice', async (req, res) => {
-    const { data, id, userComment, currentUserComment } = req.body;
+    const { data, id, userComment } = req.body;
 
     try {
-        await setNotice(data, id, userComment, currentUserComment)
-        res.end()
+        const result = await setNotice(data, id, userComment)
+        res.json(result)
     } catch (error) {
         const message = errorParser(error);
         res.status(400).json(message);

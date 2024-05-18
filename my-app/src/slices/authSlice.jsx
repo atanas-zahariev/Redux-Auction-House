@@ -4,7 +4,7 @@ import { getUser, makeCorrectIdForRedux, validator } from '../services/utility';
 
 import { api } from '../services/dataService';
 
-const { login, register, logout } = api();
+const { login, register, logout,sendNotice } = api();
 
 const userAdapter = createEntityAdapter();
 
@@ -41,6 +41,17 @@ export const logoutUser = createAsyncThunk(
     async (id) => {
         await logout();
         return id;
+    }
+);
+
+export const sendUserNotice = createAsyncThunk(
+    'user/sendNotice',
+    async (data, {rejectWithValue}) => {
+        try {
+            await sendNotice(data);
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 

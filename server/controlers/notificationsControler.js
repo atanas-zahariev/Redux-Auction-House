@@ -7,19 +7,20 @@ const {
     createNotification,
     editNotification,
     deleteNotification,
-    getOwner,
     setAnswer
 } = require('../services/notificationService');
 
 const notificationsControler = require('express').Router()
 
 notificationsControler.post('/createNotice', async (req, res) => {
-    const { message, product, user } = req.body;
+    console.log(req.body);
+    const { message, aboutProduct, fromUser, toUser } = req.body;
 
     const item = {
         message,
-        product,
-        user
+        aboutProduct,
+        fromUser,
+        toUser
     }
 
     try {
@@ -65,15 +66,6 @@ notificationsControler.post('/editNotice/:id', async (req, res) => {
     }
 })
 
-notificationsControler.get('/getOwner', async (req, res) => {
-    try {
-        const result = await getOwner(req.user._id)
-        res.json(result)
-    } catch (error) {
-        const message = errorParser(error);
-        res.status(400).json(message)
-    }
-})
 
 notificationsControler.get('/notice/:id', async (req, res) => {
     try {
@@ -85,9 +77,9 @@ notificationsControler.get('/notice/:id', async (req, res) => {
 })
 
 notificationsControler.post('/answer', async (req, res) => {
-    const { data, id } = req.body;
+    const { comment, id } = req.body;
     try {
-        await setAnswer(data, id)
+        await setAnswer(comment, id)
         res.end()
     } catch (error) {
         const message = errorParser(error);

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require("../models/User")
+const User = require("../models/User");
 
 const JWT_SECRET = 'sjbadofkala56lkfvj'
 
@@ -32,20 +32,6 @@ async function register(email, firstname, lastname, password) {
 
 async function login(email, password) {
     const user = await User.findOne({ email })
-        .populate({
-            path: 'notices',
-            populate: {
-                path: 'fromUser',
-                model: 'User'
-            }
-        })
-        .populate({
-            path: 'notices',
-            populate: {
-                path: 'aboutProduct',
-                model: 'Item'
-            }
-        }).lean();;
 
     if (!user) {
         throw new Error('Username or Password don\'t match')
@@ -90,61 +76,9 @@ function verifiToken(token) {
 
 }
 
-// notices ->
-
-async function setNotice(data, userId, userComment) {
-    const owner = await User.findById(userId)
-    const sender = await User.findById(data.fromUser);
-
-    if (!data.conversation) {
-        const newConversation = new Map()
-        newConversation.set(data.aboutProduct, { userComment })
-
-        data.conversation = newConversation
-    } else {
-        data.conversation.set(data.aboutProduct, { userComment })
-    }
-
-    const comment = data.conversation.get(data.aboutProduct).userComment
-
-    const senderConversation = new Map()
-
-    senderConversation.set(data.aboutProduct, {currentUserComment:comment});
-
-    const senderData = {
-       aboutProduct:data.aboutProduct,
-       conversation: senderConversation
-    }
-
-    if (!owner.notices) {
-        owner.notices = new Array()
-        owner.notices.push(data);
-
-        await owner.save();
-    } else {
-        owner.notices.push(data);
-        await owner.save();
-    }
-
-    if(!sender.notices){
-        sender.notices = new Array()
-        sender.notices.push(senderData)
-
-        await sender.save()
-
-        return sender.notices;
-    }else{
-        sender.notices.push(senderData)
-        await sender.save()
-
-        return sender.notices;
-    }
-}
-
 module.exports = {
     register,
     login,
     logout,
     verifiToken,
-    setNotice
 }

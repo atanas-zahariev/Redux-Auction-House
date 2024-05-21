@@ -57,18 +57,5 @@ authControler.get('/logout', async (req, res) => {
     res.status(204).end();
 });
 
-// notices ->
-
-authControler.post('/setNotice', async (req, res) => {
-    const { data, id, userComment } = req.body;
-
-    try {
-        const result = await setNotice(data, id, userComment)
-        res.json(result)
-    } catch (error) {
-        const message = errorParser(error);
-        res.status(400).json(message);
-    }
-})
 
 module.exports = authControler;

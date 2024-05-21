@@ -6,8 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { clearUser, formHandller } from '../../services/utility';
 
-import { sendUserNotice, setPersistedStateToNull } from '../../slices/authSlice';
+import {  setPersistedStateToNull } from '../../slices/authSlice';
 import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
+import { setAnswer } from '../../slices/notificationsSlice';
 
 
 
@@ -30,23 +31,28 @@ export default function Error({ error }) {
     }
 
     if (Array.isArray(error) && error.includes('Comment')) {
-        async function sendMessage(message) {
-            const id = error[1].owner;
+         console.log(error);
+        async function sendMessage(comment) {
+            const toUser = error[1].owner;
             const fromUser = error[2].id;
             const aboutProduct = error[1].id;
-            const userComment = message.description;
+            const message = comment.description;
+
             const data = {
                 fromUser,
-                aboutProduct
+                aboutProduct,
+                toUser,
+                message
             };
-            
-            const result = await dispatch(sendUserNotice({ data, id, userComment }));
 
-            if (result.error) {
+            const result = await dispatch(setAnswer(data));
+
+            if(result.error){
                 return;
-            } else {
+            }else{
                 navigate('/notice');
             }
+            
         }
 
         const onSubmit = formHandller(sendMessage);

@@ -1,23 +1,5 @@
 const { Schema, model, Types } = require('mongoose');
 
-const conversationSchema = new Schema({
-    userComment: { type: String },
-    currentUserComment: { type: String },
-})
-
-const noticeSchema = new Schema({
-    fromUser: {
-        type: Types.ObjectId, ref: 'User'
-    },
-    aboutProduct: {
-        type: Types.ObjectId, ref: 'Item'
-    },
-    conversation: {
-        type: Map,
-        of: conversationSchema
-    }
-})
-
 const userSchema = new Schema({
     email: {
         type: String,
@@ -40,7 +22,6 @@ const userSchema = new Schema({
         required: true,
     },
 
-    notices: [noticeSchema]
 });
 
 userSchema.index({ username: 1 }, {

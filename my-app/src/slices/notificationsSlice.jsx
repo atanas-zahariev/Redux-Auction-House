@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 
-import { makeCorrectIdForRedux, validator } from '../services/utility';
+import { makeCorrectIdForRedux } from '../services/utility';
 
 import { api } from '../services/dataService';
 
 const noticeAdapter = createEntityAdapter();
 
-const { createNotification, getAllNotices, getNotice, deleteNotice, editNotice } = api();
+const { createNotification, getAllNotices, } = api();
 
 const initialState = noticeAdapter.getInitialState({
     status: 'idle',
@@ -18,6 +18,19 @@ export const getNotifications = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const result = await getAllNotices();
+            return result;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
+
+export const setAnswer = createAsyncThunk(
+    'notice/createNotice',
+    async (data, { rejectWithValue }) => {
+        try {
+            const result = await createNotification(data);
             return result;
         } catch (error) {
             return rejectWithValue(error);
@@ -45,6 +58,16 @@ const noticesSlice = createSlice({
             })
             .addCase(getNotifications.rejected, (state, action) => {
                 state.status = 'fetchNoticesFaild';
+
+                state.error = action.payload;
+            })
+            .addCase(setAnswer.fulfilled, (state, action) => {
+                state.status = 'createNoticeSucceeded';
+                action.payload.type = 'notice';
+                noticeAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
+            })
+            .addCase(setAnswer.rejected, (state, action) => {
+                state.status = 'createNoticeFail';
 
                 state.error = action.payload;
             });

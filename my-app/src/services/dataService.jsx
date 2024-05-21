@@ -8,7 +8,6 @@ export const api = () => {
         login: '/auth/login',
         register: '/auth/register',
         logout: '/auth/logout',
-        sendNotice: '/auth/setNotice',
         getAllDataInSistem: '/house/catalog',
         getSpecificDataWithId: '/house/details/',
         addInSysten: '/house/create',
@@ -17,11 +16,11 @@ export const api = () => {
         closed: '/house/closed',
         action: '/house/userAction/',
         createNot: '/notification/createNotice',
-        getNotice: '/notification/notice/',
         getAllNotices: '/notification/notices',
+        getNotice: '/notification/notice/',
+        noticeAnswer: '/notification/answer',
         deleteNotice: '/notification/notice/',
         editNotice: '/notification/editNotice/',
-        getNoticeOwner: '/notification/getOwner'
     };
 
     async function login(data) {
@@ -30,10 +29,6 @@ export const api = () => {
         return result.user;
     }
 
-    async function sendNotice(data,) {
-        const result = await post(endpoints.sendNotice, data);
-        return result;
-    }
 
     async function register(data) {
         const result = await post(endpoints.register, data);
@@ -52,11 +47,6 @@ export const api = () => {
         return result;
     }
 
-    async function getAllNotices() {
-        const result = await get(endpoints.getAllNotices);
-        return result;
-    }
-
     async function getSpecificDataWithId(id) {
         const result = await get(endpoints.getSpecificDataWithId + id);
         return result;
@@ -71,34 +61,15 @@ export const api = () => {
         const result = await post(endpoints.edit + id, data);
         return result;
     };
-
-    async function editNotice(data, id) {
-        const result = await post(endpoints.editNotice + id);
-        return result;
-    }
-
+   
     async function addInSystem(data) {
         const result = await post(endpoints.addInSysten, data);
-        return result;
-    }
-
-    async function createNotification(data) {
-        const result = await post(endpoints.createNot, data);
-        return result;
-    }
-
-    async function getNotice(id) {
-        const result = await get(endpoints.getNotice + id);
         return result;
     }
 
     async function onDelete(id) {
         const result = await get(endpoints.delete + id);
         return result;
-    }
-
-    async function deleteNotice(id) {
-        await get(endpoints.deleteNotice + id);
     }
 
     async function makeAction(specificId) {
@@ -116,15 +87,38 @@ export const api = () => {
         return result;
     }
 
-    async function getOwner() {
-        const result = await get(endpoints.getNoticeOwner);
+    async function createNotification(data) {
+        const result = await post(endpoints.createNot, data);
         return result;
     }
+
+    async function noticeAnswer(data){
+        await post(endpoints.noticeAnswer, data);
+    }
+
+    async function getAllNotices() {
+        const result = await get(endpoints.getAllNotices);
+        return result;
+    }
+
+    async function getNotice(id) {
+        const result = await get(endpoints.getNotice + id);
+        return result;
+    }
+
+    async function editNotice(data, id) {
+        const result = await post(endpoints.editNotice + id);
+        return result;
+    }
+
+    async function deleteNotice(id) {
+        await get(endpoints.deleteNotice + id);
+    }
+
     return {
         login,
         register,
         logout,
-        sendNotice,
         getAllDataInSystem,
         getSpecificDataWithId,
         offer,
@@ -138,6 +132,6 @@ export const api = () => {
         getNotice,
         deleteNotice,
         editNotice,
-        getOwner
+        noticeAnswer
     };
 };

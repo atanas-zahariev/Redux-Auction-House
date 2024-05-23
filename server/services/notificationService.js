@@ -1,6 +1,4 @@
-const { Types } = require('mongoose');
 const Notifications = require('../models/Notifications');
-const User = require("../models/User")
 
 
 
@@ -24,7 +22,9 @@ async function getNotificationById(id) {
 async function createNotification(data) {
     const created = await Notifications.create(data);
 
-    return created;
+    const newNotice = await getNotificationById(created._id); 
+
+    return newNotice 
 }
 
 async function editNotification(data, id) {

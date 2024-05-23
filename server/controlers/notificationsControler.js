@@ -13,7 +13,6 @@ const {
 const notificationsControler = require('express').Router()
 
 notificationsControler.post('/createNotice', async (req, res) => {
-    console.log(req.body);
     const { message, aboutProduct, fromUser, toUser } = req.body;
 
     const item = {

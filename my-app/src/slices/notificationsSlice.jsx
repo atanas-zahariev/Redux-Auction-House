@@ -26,7 +26,7 @@ export const getNotifications = createAsyncThunk(
 );
 
 
-export const setAnswer = createAsyncThunk(
+export const setNotification = createAsyncThunk(
     'notice/createNotice',
     async (data, { rejectWithValue }) => {
         try {
@@ -61,12 +61,12 @@ const noticesSlice = createSlice({
 
                 state.error = action.payload;
             })
-            .addCase(setAnswer.fulfilled, (state, action) => {
+            .addCase(setNotification.fulfilled, (state, action) => {
                 state.status = 'createNoticeSucceeded';
                 action.payload.type = 'notice';
                 noticeAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
             })
-            .addCase(setAnswer.rejected, (state, action) => {
+            .addCase(setNotification.rejected, (state, action) => {
                 state.status = 'createNoticeFail';
 
                 state.error = action.payload;

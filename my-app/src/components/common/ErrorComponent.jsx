@@ -8,7 +8,7 @@ import { clearUser, formHandller } from '../../services/utility';
 
 import {  setPersistedStateToNull } from '../../slices/authSlice';
 import { cleanErrorFromCatalog, deleteItem, getItems, setErrorToCatalog } from '../../slices/itemsSlice';
-import { setAnswer } from '../../slices/notificationsSlice';
+import { setNotification } from '../../slices/notificationsSlice';
 
 
 
@@ -45,7 +45,7 @@ export default function Error({ error }) {
                 message
             };
 
-            const result = await dispatch(setAnswer(data));
+            const result = await dispatch(setNotification(data));
 
             if(result.error){
                 return;

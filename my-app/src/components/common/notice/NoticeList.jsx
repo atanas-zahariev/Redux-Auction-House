@@ -22,11 +22,10 @@ export default function NoticeList() {
     }, []);
     /// трябва да се взимат данните за съответните полета от съществуващият store а не да се линосват, със съответните селектори,че иначе се раминават тъпите аидита.
     const notices = useSelector(state => selectNotices(state));
-    console.log(notices);
+  
     const currentUser = useSelector(state => selectUserFromCatalog(state));
     const userNotices = notices.filter(notice => notice.fromUser._id === currentUser.id);
     console.log(userNotices);
-
     return (
         <section id="catalog-section">
 
@@ -45,7 +44,7 @@ export default function NoticeList() {
                                             : ''}
                                     </Link>
                                 </div>
-                                <p className="message">You sent a notice about : {notice.aboutProduct.title}</p>
+                                <p className="message">You sent a notice about : {notice.aboutProduct.title}, on : {notice.date}</p>
 
                             </li>)}
                     </ul> :

@@ -21,7 +21,7 @@ export default function Logout() {
             }else{
                 dispatch(logoutUser());
             }
-            dispatch(clearUserFromCatalog())
+            dispatch(clearUserFromCatalog());
         }
         
         fetchData();

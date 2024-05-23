@@ -7,6 +7,7 @@ import { formHandller } from '../../../services/utility';
 import { makeOffer, selectItemsError, cleanErrorFromCatalog, setErrorToCatalog } from '../../../slices/itemsSlice';
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 import { Link } from 'react-router-dom';
+import { selectNotices } from '../../../slices/notificationsSlice';
 
 export default function NotOwner({ item, user }) {
     const dispatch = useDispatch();
@@ -14,6 +15,13 @@ export default function NotOwner({ item, user }) {
     const itemsError = useSelector(selectItemsError);
     const authError = useSelector(selectAuthError);
 
+    const notices = useSelector(state => selectNotices(state));
+
+    const userNotices = notices.filter(notice => notice.fromUser._id === user.id);
+
+     const noticeAnswer = userNotices.filter(notice => notice.aboutProduct._id === item.id)[0]?.answer;
+
+     console.log(noticeAnswer);
 
     useEffect(() => {
         if (authError) {
@@ -61,6 +69,7 @@ export default function NotOwner({ item, user }) {
             <h1 className="item">
                 {title}
                 <div className="f-right">
+                    {/* {noticeAnswer ?  : ''} */}
                     <Link onClick={sendComment} className="action pad-small f-left" >Comment</Link>
                 </div>
             </h1>

@@ -19,7 +19,7 @@ export default function NotOwner({ item, user }) {
 
     const userNotices = notices.filter(notice => notice.fromUser._id === user.id);
 
-     const noticeAnswer = userNotices.filter(notice => notice.aboutProduct._id === item.id)[0]?.answer;
+     const noticeAnswer = userNotices.filter(notice => notice.aboutProduct._id === item.id);
 
      console.log(noticeAnswer);
 

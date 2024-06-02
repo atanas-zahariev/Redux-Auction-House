@@ -8,11 +8,11 @@ const itemSchema = new Schema({
         type: String,
         required: true,
         enum: {
-            values: ['vehicles',' real' ,'estate', 'electronics', 'furniture', 'other'],
+            values: ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'],
             message: 'enum validator failed for path `{PATH}` with value `{VALUE}`'
         }
     },
-    
+
     price: { type: Number, required: true, min: [1, 'Price cannot be a negative number.'] },
 
     imgUrl: {
@@ -24,13 +24,20 @@ const itemSchema = new Schema({
         }
     },
 
-    description:{type:String,required:true,maxLength:[200,'Description must be at most 200 characters.']},
+    description: { type: String, required: true, maxLength: [200, 'Description must be at most 200 characters.'] },
 
     owner: { type: Types.ObjectId, ref: 'User', required: true },
 
     bider: { type: Types.ObjectId, ref: 'User' }
 
 });
+
+itemSchema.pre('find',  function (next) {
+    // console.log(this.getFilter())
+    // console.log(this.getUpdate());
+    
+    next()
+})
 
 
 itemSchema.index({ title: 1 }, {

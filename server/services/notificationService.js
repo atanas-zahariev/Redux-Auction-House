@@ -6,6 +6,7 @@ async function getAllNotifications() {
     const notifications = await Notifications.find({})
         .populate('fromUser')
         .populate('aboutProduct')
+        .populate('toUser')
         .lean();
 
     return notifications;
@@ -15,6 +16,7 @@ async function getNotificationById(id) {
     const notification = await Notifications.findById(id)
         .populate('aboutProduct')
         .populate('fromUser')
+        .populate('toUser')
         .lean();
     return notification;
 }

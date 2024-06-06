@@ -19,9 +19,9 @@ export default function NotOwner({ item, user }) {
 
     const userNotices = notices.filter(notice => notice.fromUser._id === user.id);
 
-     const noticeAnswer = userNotices.filter(notice => notice.aboutProduct._id === item.id);
+    const noticeAnswer = userNotices.filter(notice => notice.aboutProduct._id === item.id).some(notice => notice.answer === undefined);
 
-     console.log(noticeAnswer);
+    console.log(noticeAnswer);
 
     useEffect(() => {
         if (authError) {
@@ -69,8 +69,7 @@ export default function NotOwner({ item, user }) {
             <h1 className="item">
                 {title}
                 <div className="f-right">
-                    {/* {noticeAnswer ?  : ''} */}
-                    <Link onClick={sendComment} className="action pad-small f-left" >Comment</Link>
+                    {noticeAnswer ? '' : <Link onClick={sendComment} className="action pad-small f-left" >Comment</Link>}
                 </div>
             </h1>
             <div className="item padded">

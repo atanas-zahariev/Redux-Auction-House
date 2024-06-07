@@ -1,5 +1,10 @@
 import { back4AppRequest } from '../hooks/back4appApi';
 import { clearUser, setUser, getUser } from './utility';
+import Parse from 'parse/dist/parse.min.js';
+
+Parse.initialize('gyK4yLMJ7Vkdxl10WEuLToXTqtUYiumw8UqPxTmQ', 'Y2Jq1AYuOe08rQbA8rbB3atRQnSEInRgFEFMRGLM');
+
+Parse.serverURL = 'https://parseapi.back4app.com/';
 
 export const back4appApi = () => {
     const { get, post, put, del } = back4AppRequest();
@@ -64,6 +69,179 @@ export const back4appApi = () => {
         return result;
     }
 
+    // with parse -->
+
+    async function saveNewPerson(name, age, pointerId,) {
+        const User = Parse.Object.extend('_User');
+        const pointer = User.createWithoutData(pointerId);
+
+        const Person = Parse.Object.extend('Person');
+        const person = new Person();
+
+        person.set('name', name);
+        person.set('age', age);
+        person.set('pointer', pointer);
+        person.set('userArr', [pointerId]);
+
+        try {
+            const result = await person.save();
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
+    async function retrievePerson(id) {
+        const query = new Parse.Query('Person');
+
+        try {
+            const person = await query.get(id);
+
+            return person.attributes;
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
+    async function updatePerson(id, arrId) {
+        const query = new Parse.Query('Person');
+        try {
+            const person = await query.get(id);
+            const userArr = person.attributes.userArr;
+            userArr.push(arrId);
+            await person.save();
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function addBuyer(id, pointerId) {
+        const User = Parse.Object.extend('_User');
+        const userPointer = User.createWithoutData(pointerId);
+
+        const query = new Parse.Query('Person');
+        try {
+            const person = await query.get(id);
+            person.set('buyer', userPointer);
+            await person.save();
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
+    async function removeField(id, field) {
+        const query = new Parse.Query('Person');
+        try {
+            const person = await query.get(id);
+            person.unset(field);
+            await person.save();
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
+    async function deletePerson(id) {
+        const query = new Parse.Query('Person');
+
+        try {
+            const person = await query.get(id);
+
+            await person.destroy();
+        } catch (error) {
+            throw error.message;
+
+        }
+    }
+
+
+    /// Query -->
+
+    async function equalTo() {
+        const Person = Parse.Object.extend('Person');
+        const query = new Parse.Query(Person);
+        query.equalTo('name', 'thirdRecord');
+        try {
+            const result = await query.find();
+            console.log(result[0].attributes);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    async function notEqualTo(name, age) {
+        const query = new Parse.Query('Person');
+        query.notEqualTo('name', name);
+        query.greaterThan('age', age);
+        try {
+            const result = await query.find();
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function queryFirst() {
+        const query = new Parse.Query('Person');
+        try {
+            const result = await query.first();
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+    async function matchesKeyInQuery() {
+        const User = Parse.Object.extend('_User');
+        const userQuery = new Parse.Query(User);
+        userQuery.equalTo('username', 'Peter');
+
+        const pesronQuery = new Parse.Query('Person');
+        // сравнява стойноста на pointer  с тази на objectId от _User и връща съответния запис от Person.
+        pesronQuery.matchesKeyInQuery('pointer', 'objectId', userQuery);
+        try {
+            const result = await pesronQuery.find();
+            return result;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function matchesKeyInQueryBack(){
+        const User = Parse.Object.extend('_User');
+        const userQuery = new Parse.Query(User);
+
+        const pesronQuery = new Parse.Query('Person');
+        pesronQuery.equalTo('name', 'secondRecord');
+         // сравнява стойноста на objectId  с тази върната от pointer.objectId и връща съответния потребител
+        userQuery.matchesKeyInQuery('objectId','pointer.objectId',pesronQuery);
+        try {
+            const result = await userQuery.find();
+            return result;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function selectQuery(field){
+        const query = new Parse.Query('_User');
+        // служи за да избере само определени полета от даден клас.
+        query.select(field);
+
+        try {
+            const result = await query.find();
+            console.log(result[0].attributes);
+            return result;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
     return {
         register,
         login,
@@ -71,7 +249,19 @@ export const back4appApi = () => {
         createItem,
         getItems,
         getItemById,
-        editItem
+        editItem,
+        saveNewPerson,
+        retrievePerson,
+        deletePerson,
+        updatePerson,
+        removeField,
+        equalTo,
+        notEqualTo,
+        addBuyer,
+        queryFirst,
+        matchesKeyInQuery,
+        matchesKeyInQueryBack,
+        selectQuery
     };
 
 };

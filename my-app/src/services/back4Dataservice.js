@@ -211,14 +211,14 @@ export const back4appApi = () => {
         }
     }
 
-    async function matchesKeyInQueryBack(){
+    async function matchesKeyInQueryBack() {
         const User = Parse.Object.extend('_User');
         const userQuery = new Parse.Query(User);
 
         const pesronQuery = new Parse.Query('Person');
         pesronQuery.equalTo('name', 'secondRecord');
-         // сравнява стойноста на objectId  с тази върната от pointer.objectId и връща съответния потребител
-        userQuery.matchesKeyInQuery('objectId','pointer.objectId',pesronQuery);
+        // сравнява стойноста на objectId  с тази върната от pointer.objectId и връща съответния потребител
+        userQuery.matchesKeyInQuery('objectId', 'pointer.objectId', pesronQuery);
         try {
             const result = await userQuery.find();
             return result;
@@ -227,7 +227,7 @@ export const back4appApi = () => {
         }
     }
 
-    async function selectQuery(field){
+    async function selectQuery(field) {
         const query = new Parse.Query('_User');
         // служи за да избере само определени полета от даден клас.
         query.select(field);
@@ -239,6 +239,25 @@ export const back4appApi = () => {
         } catch (error) {
             console.log(error.message);
         }
+    }
+
+    // login register logout with parse
+
+    async function parseRegister(username, password, email) {
+        const user = new Parse.User();
+
+        user.set('username', username);
+        user.set('password', password);
+        user.set('email', email);
+
+        try {
+            const result = await user.signUp();
+            return result;
+            // Hooray! Let them use the app now.
+          } catch (error) {
+            // Show the error message somewhere and let the user try again.
+            console.log(error.message);
+          }
     }
 
 
@@ -261,7 +280,8 @@ export const back4appApi = () => {
         queryFirst,
         matchesKeyInQuery,
         matchesKeyInQueryBack,
-        selectQuery
+        selectQuery,
+        parseRegister
     };
 
 };

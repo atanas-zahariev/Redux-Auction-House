@@ -260,6 +260,17 @@ export const back4appApi = () => {
           }
     }
 
+    async function parseLogin(username,password){
+        // const user = new Parse.User();
+
+        try {
+            const user = await Parse.User.logIn(username, password);
+            return user;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
 
     return {
         register,
@@ -281,7 +292,8 @@ export const back4appApi = () => {
         matchesKeyInQuery,
         matchesKeyInQueryBack,
         selectQuery,
-        parseRegister
+        parseRegister,
+        parseLogin
     };
 
 };

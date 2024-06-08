@@ -6,6 +6,15 @@ Parse.initialize('gyK4yLMJ7Vkdxl10WEuLToXTqtUYiumw8UqPxTmQ', 'Y2Jq1AYuOe08rQbA8r
 
 Parse.serverURL = 'https://parseapi.back4app.com/';
 
+Parse.User._saveCurrentUser = function (user) {
+    // Не правим нищо, за да предотвратим съхранението в localStorage
+};
+
+Parse.User._clearCurrentUser = function () {
+    // Не правим нищо, за да предотвратим изтриването от localStorage
+};
+
+
 export const back4appApi = () => {
     const { get, post, put, del } = back4AppRequest();
 
@@ -254,18 +263,29 @@ export const back4appApi = () => {
             const result = await user.signUp();
             return result;
             // Hooray! Let them use the app now.
-          } catch (error) {
+        } catch (error) {
             // Show the error message somewhere and let the user try again.
             console.log(error.message);
-          }
+        }
     }
 
-    async function parseLogin(username,password){
+    async function parseLogin(username, password) {
         // const user = new Parse.User();
 
         try {
             const user = await Parse.User.logIn(username, password);
-            return user;
+            const sessionToken = user.attributes.sessionToken;
+            // const currentUser = Parse.User.current();
+            return sessionToken;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function parseLogout() {
+        try {
+            const result = await Parse.User.logOut();
+            return result;
         } catch (error) {
             console.log(error.message);
         }
@@ -293,7 +313,8 @@ export const back4appApi = () => {
         matchesKeyInQueryBack,
         selectQuery,
         parseRegister,
-        parseLogin
+        parseLogin,
+        parseLogout
     };
 
 };

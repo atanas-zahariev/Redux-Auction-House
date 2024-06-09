@@ -92,6 +92,12 @@ export const back4appApi = () => {
         person.set('pointer', pointer);
         person.set('userArr', [pointerId]);
 
+        const personACL = new Parse.ACL(Parse.User.current());
+
+        personACL.setPublicReadAccess(true);
+        
+        person.setACL(personACL);
+
         try {
             const result = await person.save();
             return result;
@@ -114,12 +120,11 @@ export const back4appApi = () => {
     }
 
 
-    async function updatePerson(id, arrId) {
+    async function updatePerson(id, name) {
         const query = new Parse.Query('Person');
         try {
             const person = await query.get(id);
-            const userArr = person.attributes.userArr;
-            userArr.push(arrId);
+            person.set('name',name);
             await person.save();
         } catch (error) {
             console.log(error.message);
@@ -291,6 +296,16 @@ export const back4appApi = () => {
         }
     }
 
+    function currentUser() {
+        const currentUser = Parse.User.current();
+        if(currentUser){
+
+            return currentUser.attributes;
+        }else{
+            return currentUser;
+        }
+    }
+
 
     return {
         register,
@@ -314,7 +329,8 @@ export const back4appApi = () => {
         selectQuery,
         parseRegister,
         parseLogin,
-        parseLogout
+        parseLogout,
+        currentUser
     };
 
 };

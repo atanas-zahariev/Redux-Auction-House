@@ -6,14 +6,6 @@ Parse.initialize('gyK4yLMJ7Vkdxl10WEuLToXTqtUYiumw8UqPxTmQ', 'Y2Jq1AYuOe08rQbA8r
 
 Parse.serverURL = 'https://parseapi.back4app.com/';
 
-Parse.User._saveCurrentUser = function (user) {
-    // Не правим нищо, за да предотвратим съхранението в localStorage
-};
-
-Parse.User._clearCurrentUser = function () {
-    // Не правим нищо, за да предотвратим изтриването от localStorage
-};
-
 
 export const back4appApi = () => {
     const { get, post, put, del } = back4AppRequest();
@@ -39,7 +31,7 @@ export const back4appApi = () => {
 
     async function login(data) {
         const result = await post(endpoints.login, data);
-        setUser(result);
+        // setUser(result);
         return result;
     }
 
@@ -92,10 +84,11 @@ export const back4appApi = () => {
         person.set('pointer', pointer);
         person.set('userArr', [pointerId]);
 
-        const personACL = new Parse.ACL(Parse.User.current());
+        const personACL = new Parse.ACL();
 
         personACL.setPublicReadAccess(true);
-        
+        personACL.setWriteAccess(Parse.User.current().id, true);
+
         person.setACL(personACL);
 
         try {
@@ -124,7 +117,7 @@ export const back4appApi = () => {
         const query = new Parse.Query('Person');
         try {
             const person = await query.get(id);
-            person.set('name',name);
+            person.set('name', name);
             await person.save();
         } catch (error) {
             console.log(error.message);
@@ -298,12 +291,94 @@ export const back4appApi = () => {
 
     function currentUser() {
         const currentUser = Parse.User.current();
-        if(currentUser){
+        if (currentUser) {
 
             return currentUser.attributes;
-        }else{
+        } else {
             return currentUser;
         }
+    }
+
+    async function createRole(userId) {
+        const usersToAddToRole = new Parse.Query('_User');
+        const user = await usersToAddToRole.get(userId);
+
+        const roleACL = new Parse.ACL();
+
+        roleACL.setPublicReadAccess(true);
+
+        const role = new Parse.Role('owner', roleACL);
+        role.getUsers().add(user);
+        try {
+            const result = await role.save();
+            return result;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function retrieveRole(userId) {
+        const role = new Parse.Query('_Role');
+        role.equalTo('name', 'owner');
+        try {
+            const result = await role.first();
+            return result;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    async function getShema() {
+        try {
+            const result = await Parse.Cloud.run('getSchema');
+            console.log(result);
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
+
+    const params = {
+        id: 1,
+        name: 'peter'
+    };
+
+    async function sayHallo() {
+        try {
+            const result = await Parse.Cloud.run('hello', params);
+            return result;
+        } catch (error) {
+            console.error('Error:', error.message);
+
+        }
+    }
+
+    // Parse.Cloud.define('gateItems', async (request) => {
+    //     const query = new Parse.Query('Item');
+    //     try {
+    //         const result = await query.get();
+    //         return result;
+    //     } catch (error) {
+    //         throw new Parse.Error(Parse.Error.SAVE_FAILED, error.message);
+    //     }
+    // });
+
+    async function saveItem(params) {
+        try {
+            const result = await Parse.Cloud.run('saveItem', params);
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
+    async function getCloudItems(){
+       try {
+        const result = await Parse.Cloud.run('getItems');
+        return result;
+       } catch (error) {
+        throw error.message;        
+       }
     }
 
 
@@ -330,7 +405,13 @@ export const back4appApi = () => {
         parseRegister,
         parseLogin,
         parseLogout,
-        currentUser
+        currentUser,
+        createRole,
+        retrieveRole,
+        getShema,
+        sayHallo,
+        saveItem,
+        getCloudItems
     };
 
 };

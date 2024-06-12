@@ -3,16 +3,18 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import { makeCorrectIdForRedux, validator } from '../services/utility';
 
 import { api } from '../services/dataService';
+import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
 const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem } = api();
+const {getCloudItems} = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
     async (_, { rejectWithValue }) => {
         try {
-            const items = await getAllDataInSystem();
+            const items = await getCloudItems();
             return items;
         } catch (error) {
             return rejectWithValue(error);
@@ -133,10 +135,11 @@ const itemsSlice = createSlice({
         builder
             .addCase(getItems.fulfilled, (state, action) => {
                 state.status = 'fetchItemsSucceeded';
-                itemsAdapter.addMany(state, action.payload.items.map(item => {
-                    item.type = 'item';
-                    return makeCorrectIdForRedux(item);
-                }));
+                // itemsAdapter.addMany(state, action.payload.items.map(item => {
+                //     item.type = 'item';
+                //     return makeCorrectIdForRedux(item);
+                // }));
+                itemsAdapter.addMany(state,action.payload);
                 if (action.payload.user) {
                     action.payload.user.type = 'user';
                     state.user = makeCorrectIdForRedux(action.payload.user);

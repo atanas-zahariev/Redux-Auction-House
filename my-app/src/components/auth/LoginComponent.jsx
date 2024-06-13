@@ -46,7 +46,7 @@ export default function Login() {
 
                     <label>
                         <span>Email</span>
-                        <input type="text" name="email" />
+                        <input type="text" name="username" />
                     </label>
                     <label>
                         <span>Password</span>

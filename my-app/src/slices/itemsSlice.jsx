@@ -8,6 +8,7 @@ import { back4appApi } from '../services/back4Dataservice';
 const itemsAdapter = createEntityAdapter();
 
 const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem } = api();
+
 const {getCloudItems} = back4appApi();
 
 export const getItems = createAsyncThunk(
@@ -116,9 +117,8 @@ const itemsSlice = createSlice({
     name: 'items',
     initialState,
     reducers: {
-        setUserToCatalog(state, action) {
-            action.payload.type = 'user';
-            state.user = makeCorrectIdForRedux(action.payload);
+        setUserToCatalog(state, action) {          
+            state.user = action.payload;
         },
         clearUserFromCatalog(state, action) {
             state.user = null;
@@ -139,10 +139,10 @@ const itemsSlice = createSlice({
                 //     item.type = 'item';
                 //     return makeCorrectIdForRedux(item);
                 // }));
-                itemsAdapter.addMany(state,action.payload);
-                if (action.payload.user) {
-                    action.payload.user.type = 'user';
-                    state.user = makeCorrectIdForRedux(action.payload.user);
+                itemsAdapter.addMany(state,action.payload.items);
+
+                if (action.payload.user) {                   
+                    state.user = action.payload.user;
                 }
             })
             .addCase(getItems.rejected, (state, action) => {

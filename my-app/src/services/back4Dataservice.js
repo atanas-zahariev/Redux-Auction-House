@@ -272,11 +272,14 @@ export const back4appApi = () => {
 
         try {
             const user = await Parse.User.logIn(username, password);
-            const sessionToken = user.attributes.sessionToken;
-            // const currentUser = Parse.User.current();
-            return sessionToken;
+            const userId = user.id;
+            // const {username} = user.attributes;
+            return {
+                id: userId,
+                username
+            };
         } catch (error) {
-            console.log(error.message);
+            throw error.message;
         }
     }
 
@@ -372,13 +375,13 @@ export const back4appApi = () => {
     }
 
 
-    async function getCloudItems(){
-       try {
-        const result = await Parse.Cloud.run('getItems');
-        return result;
-       } catch (error) {
-        throw error.message;        
-       }
+    async function getCloudItems() {
+        try {
+            const result = await Parse.Cloud.run('getItems');
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
     }
 
 

@@ -4,17 +4,22 @@ import { getUser, makeCorrectIdForRedux, validator } from '../services/utility';
 
 import { api } from '../services/dataService';
 import { setUserToCatalog } from './itemsSlice';
+import { back4appApi } from '../services/back4Dataservice';
 
-const { login, register, logout, sendNotice } = api();
+const { login, register, logout } = api();
+
+const {parseLogout,parseLogin,parseRegister} = back4appApi();
+
 
 const userAdapter = createEntityAdapter();
 
 export const loginUser = createAsyncThunk(
     'user/login',
     async (data, { rejectWithValue }) => {
+        
         try {
             validator(data);
-            const result = await login(data);
+            const result = await parseLogin(data.username,data.password);
             return result;
         } catch (error) {
 
@@ -70,8 +75,7 @@ const userSlice = createSlice({
                 state.status = 'loginSucceeded';
                 state.persistedState = getUser();
 
-                action.payload.type = 'user';
-                userAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
+                userAdapter.addOne(state, action.payload);
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'loginFaild';

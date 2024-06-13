@@ -1,4 +1,4 @@
-const item = 'user';
+const item = 'Parse/gyK4yLMJ7Vkdxl10WEuLToXTqtUYiumw8UqPxTmQ/currentUser';
 
 export function getUser() {
     try {

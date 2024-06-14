@@ -45,7 +45,7 @@ export const registerUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     'user/logout',
     async (id) => {
-        await logout();
+        await parseLogout();
         return id;
     }
 );

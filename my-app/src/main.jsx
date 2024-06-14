@@ -32,7 +32,7 @@ async function fetchItemBeforeRender() {
 
   await store.dispatch(getItems());
 
-  await store.dispatch(getNotifications());
+  // await store.dispatch(getNotifications());
 
   const container = document.getElementById('root');
 

@@ -45,7 +45,7 @@ export default function Login() {
                 <form className="aligned" onSubmit={onSubmut} >
 
                     <label>
-                        <span>Email</span>
+                        <span>Username</span>
                         <input type="text" name="username" />
                     </label>
                     <label>

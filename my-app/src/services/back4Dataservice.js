@@ -250,7 +250,7 @@ export const back4appApi = () => {
 
     // login register logout with parse
 
-    async function parseRegister(username, password, email) {
+    async function parseRegister(username, password, email, repass) {
         const user = new Parse.User();
 
         user.set('username', username);
@@ -258,12 +258,15 @@ export const back4appApi = () => {
         user.set('email', email);
 
         try {
+            await Parse.Cloud.run('check', { username, password, email, repass });
             const result = await user.signUp();
-            return result;
-            // Hooray! Let them use the app now.
+            const userId = result.id;
+            return {
+                id: userId,
+                username
+            };
         } catch (error) {
-            // Show the error message somewhere and let the user try again.
-            console.log(error.message);
+            throw error.message;
         }
     }
 

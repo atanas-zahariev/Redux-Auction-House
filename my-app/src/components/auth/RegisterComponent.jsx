@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+/* eslint-disable @typescript-eslint/no-restricted-imports */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -50,12 +50,8 @@ export default function Register() {
             <input type="text" name="email" />
           </label>
           <label>
-            <span>First name</span>
-            <input type="text" name="firstname" />
-          </label>
-          <label>
-            <span>Last name</span>
-            <input type="text" name="lastname" />
+            <span>Username</span>
+            <input type="text" name="username" />
           </label>
           <label>
             <span>Password</span>

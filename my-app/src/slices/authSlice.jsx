@@ -8,7 +8,7 @@ import { back4appApi } from '../services/back4Dataservice';
 
 const { login, register, logout } = api();
 
-const {parseLogout,parseLogin,parseRegister} = back4appApi();
+const { parseLogout, parseLogin, parseRegister } = back4appApi();
 
 
 const userAdapter = createEntityAdapter();
@@ -16,10 +16,10 @@ const userAdapter = createEntityAdapter();
 export const loginUser = createAsyncThunk(
     'user/login',
     async (data, { rejectWithValue }) => {
-        
+
         try {
             validator(data);
-            const result = await parseLogin(data.username,data.password);
+            const result = await parseLogin(data.username, data.password);
             return result;
         } catch (error) {
 
@@ -33,7 +33,7 @@ export const registerUser = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             validator(data);
-            const result = await register(data);
+            const result = await parseRegister(data.username, data.password, data.email, data.repass);
             return result;
         } catch (error) {
 
@@ -87,7 +87,7 @@ const userSlice = createSlice({
                 state.persistedState = getUser();
 
                 action.payload.type = 'user';
-                userAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
+                userAdapter.addOne(state,action.payload);
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.status = 'registerFaild';
@@ -101,7 +101,7 @@ const userSlice = createSlice({
                     userAdapter.removeOne(state, action.payload);
                 }
             });
-          
+
     }
 });
 

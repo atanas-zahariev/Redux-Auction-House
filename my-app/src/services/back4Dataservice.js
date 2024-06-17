@@ -253,14 +253,19 @@ export const back4appApi = () => {
     async function parseRegister(username, password, email, repass) {
         const user = new Parse.User();
 
-        user.set('username', username);
-        user.set('password', password);
-        user.set('email', email);
+        user.set({
+            username,
+            password,
+            email
+        });
+
 
         try {
             await Parse.Cloud.run('check', { username, password, email, repass });
+
             const result = await user.signUp();
             const userId = result.id;
+            
             return {
                 id: userId,
                 username
@@ -274,9 +279,11 @@ export const back4appApi = () => {
         // const user = new Parse.User();
 
         try {
+            await Parse.Cloud.run('check', { username, password });
+
             const user = await Parse.User.logIn(username, password);
             const userId = user.id;
-            // const {username} = user.attributes;
+
             return {
                 id: userId,
                 username
@@ -291,7 +298,7 @@ export const back4appApi = () => {
             const result = await Parse.User.logOut();
             return result;
         } catch (error) {
-            console.log(error.message);
+            throw error.message;
         }
     }
 
@@ -343,30 +350,6 @@ export const back4appApi = () => {
         }
     }
 
-    const params = {
-        id: 1,
-        name: 'peter'
-    };
-
-    async function sayHallo() {
-        try {
-            const result = await Parse.Cloud.run('hello', params);
-            return result;
-        } catch (error) {
-            console.error('Error:', error.message);
-
-        }
-    }
-
-    // Parse.Cloud.define('gateItems', async (request) => {
-    //     const query = new Parse.Query('Item');
-    //     try {
-    //         const result = await query.get();
-    //         return result;
-    //     } catch (error) {
-    //         throw new Parse.Error(Parse.Error.SAVE_FAILED, error.message);
-    //     }
-    // });
 
     async function saveItem(params) {
         try {
@@ -415,7 +398,6 @@ export const back4appApi = () => {
         createRole,
         retrieveRole,
         getShema,
-        sayHallo,
         saveItem,
         getCloudItems
     };

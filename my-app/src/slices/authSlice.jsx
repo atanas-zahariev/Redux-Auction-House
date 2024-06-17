@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 
-import { getUser, makeCorrectIdForRedux, validator } from '../services/utility';
+import { getUser, validator } from '../services/utility';
 
-import { api } from '../services/dataService';
-import { setUserToCatalog } from './itemsSlice';
 import { back4appApi } from '../services/back4Dataservice';
-
-const { login, register, logout } = api();
 
 const { parseLogout, parseLogin, parseRegister } = back4appApi();
 

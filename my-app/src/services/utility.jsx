@@ -52,7 +52,7 @@ export const validator = (value) => {
 
     const REGEX_FOR_Email = /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/m;
 
-    const { title, category, imgUrl, price, description, email, firstname, lastname, password, repass, oldPrice } = value;
+    const { title, category, imgUrl, price, description, email, username, password, repass, oldPrice } = value;
 
     if (Object.values(value).some(x => x === '')) {
         error = ['All fields are required.'];
@@ -67,19 +67,13 @@ export const validator = (value) => {
         }
     }
 
-    if (firstname) {
-        if (firstname.length < 2) {
+    if (username) {
+        if (username.length < 2) {
             error = ['First name must be at least 2 characters!'];
             throw error;
         }
     }
 
-    if (lastname) {
-        if (lastname.length < 2) {
-            error = ['Last name must be at least 2 characters!'];
-            throw error;
-        }
-    }
 
     if (password) {
         if (password.length < 5) {

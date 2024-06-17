@@ -29,6 +29,7 @@ export default function CreateItem() {
     }, []);
 
     const create = async (data) => {
+        data.price = Number(data.price);
         const result = await dispatch(createItem(data));
 
         if (result.error) {

@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 
-import { makeCorrectIdForRedux, validator } from '../services/utility';
+import { makeCorrectIdForRedux, validator, getUser } from '../services/utility';
 
 import { api } from '../services/dataService';
 import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getAllDataInSystem, offer, getTotalAction, getUserAction, onDelete, onEdit, addInSystem } = api();
+const { offer, getTotalAction, getUserAction, onDelete, onEdit } = api();
 
-const {getCloudItems} = back4appApi();
+const { getCloudItems, saveItem } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -30,7 +30,7 @@ export const createItem = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             validator(data);
-            const result = await addInSystem(data);
+            const result = await saveItem(data);
             return result;
         } catch (error) {
             return rejectWithValue(error);
@@ -109,7 +109,7 @@ export const makeOffer = createAsyncThunk(
 const initialState = itemsAdapter.getInitialState({
     status: 'idle',
     error: null,
-    user: null,
+    user: getUser(),
     closedOffers: null
 });
 
@@ -117,7 +117,7 @@ const itemsSlice = createSlice({
     name: 'items',
     initialState,
     reducers: {
-        setUserToCatalog(state, action) {          
+        setUserToCatalog(state, action) {
             state.user = action.payload;
         },
         clearUserFromCatalog(state, action) {
@@ -139,10 +139,10 @@ const itemsSlice = createSlice({
                 //     item.type = 'item';
                 //     return makeCorrectIdForRedux(item);
                 // }));
-                itemsAdapter.addMany(state,action.payload.items);
+                itemsAdapter.addMany(state, action.payload.items);
 
-                if (action.payload.user) {                   
-                    state.user = action.payload.user;
+                if (action.payload.user) {
+                    state.user.id = action.payload.user;
                 }
             })
             .addCase(getItems.rejected, (state, action) => {
@@ -209,9 +209,8 @@ const itemsSlice = createSlice({
             })
             .addCase(createItem.fulfilled, (state, action) => {
                 state.status = 'createItemSucceeded';
-                action.payload.type = 'item';
 
-                itemsAdapter.addOne(state, makeCorrectIdForRedux(action.payload));
+                itemsAdapter.addOne(state, action.payload);
             })
             .addCase(createItem.rejected, (state, action) => {
                 state.status = 'createItemSucceeded';

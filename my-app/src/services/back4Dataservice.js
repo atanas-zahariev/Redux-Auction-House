@@ -223,7 +223,7 @@ export const back4appApi = () => {
         const userQuery = new Parse.Query(User);
 
         const pesronQuery = new Parse.Query('Person');
-        pesronQuery.equalTo('name', 'secondRecord');
+        pesronQuery.equalTo('name', 'Mary2');
         // сравнява стойноста на objectId  с тази върната от pointer.objectId и връща съответния потребител
         userQuery.matchesKeyInQuery('objectId', 'pointer.objectId', pesronQuery);
         try {
@@ -265,7 +265,7 @@ export const back4appApi = () => {
 
             const result = await user.signUp();
             const userId = result.id;
-            
+
             return {
                 id: userId,
                 username
@@ -353,8 +353,13 @@ export const back4appApi = () => {
 
     async function saveItem(params) {
         try {
+            await Parse.Cloud.run('check', params);
+
             const result = await Parse.Cloud.run('saveItem', params);
-            return result;
+            const itemId = result.id;
+            const { title, category, imgUrl, owner, price } = result.attributes;
+            const itemOwner = owner.id;
+            return { id: itemId, title, category, imgUrl, owner: itemOwner, price };
         } catch (error) {
             throw error.message;
         }
@@ -367,6 +372,15 @@ export const back4appApi = () => {
             return result;
         } catch (error) {
             throw error.message;
+        }
+    }
+
+    async function getCloudItemById(id){
+        try {
+            const result = await Parse.Cloud.run('getItemById', {id});
+            return result;
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -399,7 +413,8 @@ export const back4appApi = () => {
         retrieveRole,
         getShema,
         saveItem,
-        getCloudItems
+        getCloudItems,
+        getCloudItemById
     };
 
 };

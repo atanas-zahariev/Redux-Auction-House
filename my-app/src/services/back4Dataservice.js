@@ -124,6 +124,18 @@ export const back4appApi = () => {
         }
     }
 
+    async function updateItem(data, id){
+        console.log(data);
+        const query = new Parse.Query('Item');
+        try {
+            const item = await query.get(id);
+            item.set(data);
+            await item.save();
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
     async function addBuyer(id, pointerId) {
         const User = Parse.Object.extend('_User');
         const userPointer = User.createWithoutData(pointerId);
@@ -384,6 +396,15 @@ export const back4appApi = () => {
         }
     }
 
+    async function editCloudItem(data){
+      try {
+        const result = await Parse.Cloud.run('editItem', data);
+        return result;
+      } catch (error) {
+        throw error.message;
+      }
+    }
+
 
     return {
         register,
@@ -414,7 +435,9 @@ export const back4appApi = () => {
         getShema,
         saveItem,
         getCloudItems,
-        getCloudItemById
+        getCloudItemById,
+        editCloudItem,
+        updateItem
     };
 
 };

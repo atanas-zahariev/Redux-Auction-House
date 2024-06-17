@@ -9,7 +9,7 @@ const itemsAdapter = createEntityAdapter();
 
 const { offer, getTotalAction, getUserAction, onDelete, onEdit } = api();
 
-const { getCloudItems, saveItem } = back4appApi();
+const { getCloudItems, saveItem, editCloudItem,updateItem } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -41,9 +41,10 @@ export const createItem = createAsyncThunk(
 export const editItem = createAsyncThunk(
     'items/editItem',
     async ({ data, id }, { rejectWithValue }) => {
+        console.log('editItemSlice');
         try {
             validator(data);
-            await onEdit(data, id);
+            await updateItem( data, id );
             data.id = id;
             return { ...data };
         } catch (error) {

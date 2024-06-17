@@ -21,6 +21,8 @@ export default function Edit() {
         if (!data.price) {
             data.price = item.price;
         }
+        data.price = Number(data.price);
+        
         const result = await dispatch(editItem({ data, id }));
         if (result.error) {
             return;

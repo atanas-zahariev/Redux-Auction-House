@@ -7,9 +7,9 @@ import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
-const { offer, getTotalAction, getUserAction, onDelete, onEdit } = api();
+const { offer, getTotalAction, getUserAction, onDelete, } = api();
 
-const { getCloudItems, saveItem, editCloudItem,updateItem } = back4appApi();
+const { getCloudItems, saveItem, updateItem, addItemBuyer } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -44,7 +44,7 @@ export const editItem = createAsyncThunk(
         console.log('editItemSlice');
         try {
             validator(data);
-            await updateItem( data, id );
+            await updateItem(data, id);
             data.id = id;
             return { ...data };
         } catch (error) {
@@ -98,8 +98,12 @@ export const makeOffer = createAsyncThunk(
     async ({ data, id }, { rejectWithValue }) => {
         try {
             validator(data);
-            const result = await offer(data, id);
-            return result;
+            await addItemBuyer(data, id);
+
+            return {
+                data,
+                id
+            };
         } catch (error) {
             return rejectWithValue(error);
 
@@ -154,11 +158,9 @@ const itemsSlice = createSlice({
             .addCase(makeOffer.fulfilled, (state, action) => {
                 state.status = 'offerSucceeded';
 
-                action.payload.updatedItem.type = 'item';
+                const { data, id } = action.payload;
 
-                const updatedItem = makeCorrectIdForRedux(action.payload.updatedItem);
-
-                itemsAdapter.upsertOne(state, updatedItem);
+                itemsAdapter.updateOne(state, { id: id, changes: { price: data.price } });
             })
             .addCase(makeOffer.rejected, (state, action) => {
                 state.status = 'offerFaild';

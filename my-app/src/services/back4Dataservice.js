@@ -124,7 +124,7 @@ export const back4appApi = () => {
         }
     }
 
-    async function updateItem(data, id){
+    async function updateItem(data, id) {
         console.log(data);
         const query = new Parse.Query('Item');
         try {
@@ -136,7 +136,8 @@ export const back4appApi = () => {
         }
     }
 
-    async function addBuyer(id, pointerId) {
+    async function addBuyer(id) {
+        const pointerId = currentUser().id;
         const User = Parse.Object.extend('_User');
         const userPointer = User.createWithoutData(pointerId);
 
@@ -144,11 +145,24 @@ export const back4appApi = () => {
         try {
             const person = await query.get(id);
             person.set('buyer', userPointer);
-            await person.save();
+            return await person.save();
         } catch (error) {
             throw error.message;
         }
     }
+
+    async function addItemBuyer(data, itemId) {
+        data.id = itemId;
+        try {
+            await Parse.Cloud.run('check', data);
+
+            await Parse.Cloud.run('addBuyer', data);
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
 
 
     async function removeField(id, field) {
@@ -219,25 +233,25 @@ export const back4appApi = () => {
         const userQuery = new Parse.Query(User);
         userQuery.equalTo('username', 'Peter');
 
-        const pesronQuery = new Parse.Query('Person');
-        // сравнява стойноста на pointer  с тази на objectId от _User и връща съответния запис от Person.
-        pesronQuery.matchesKeyInQuery('pointer', 'objectId', userQuery);
+        const itemQuery = new Parse.Query('Item');
+        // сравнява стойноста на owner  с тази на objectId от _User и връща съответния/те запис/и от Item.
+        itemQuery.matchesKeyInQuery('owner', 'objectId', userQuery);
         try {
-            const result = await pesronQuery.find();
+            const result = await itemQuery.find();
             return result;
         } catch (error) {
             console.log(error.message);
         }
     }
 
-    async function matchesKeyInQueryBack() {
+    async function matchesKeyInQueryBack(category) {
         const User = Parse.Object.extend('_User');
         const userQuery = new Parse.Query(User);
 
-        const pesronQuery = new Parse.Query('Person');
-        pesronQuery.equalTo('name', 'Mary2');
-        // сравнява стойноста на objectId  с тази върната от pointer.objectId и връща съответния потребител
-        userQuery.matchesKeyInQuery('objectId', 'pointer.objectId', pesronQuery);
+        const itemQuery = new Parse.Query('Item');
+        itemQuery.equalTo('category', category);
+        // сравнява стойноста на objectId  с тази върната от owner.objectId и връща съответния потребител
+        userQuery.matchesKeyInQuery('objectId', 'owner.objectId', itemQuery);
         try {
             const result = await userQuery.find();
             return result;
@@ -318,7 +332,7 @@ export const back4appApi = () => {
         const currentUser = Parse.User.current();
         if (currentUser) {
 
-            return currentUser.attributes;
+            return currentUser;
         } else {
             return currentUser;
         }
@@ -387,22 +401,24 @@ export const back4appApi = () => {
         }
     }
 
-    async function getCloudItemById(id){
+    async function getCloudItemById(id) {
         try {
-            const result = await Parse.Cloud.run('getItemById', {id});
+            const result = await Parse.Cloud.run('getItemById', { id });
             return result;
         } catch (error) {
             console.log(error);
         }
     }
 
-    async function editCloudItem(data){
-      try {
-        const result = await Parse.Cloud.run('editItem', data);
-        return result;
-      } catch (error) {
-        throw error.message;
-      }
+    async function editCloudItem(data) {
+        try {
+            await Parse.Cloud.run('check', data);
+
+            const result = await Parse.Cloud.run('editItem', data);
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
     }
 
 
@@ -437,7 +453,8 @@ export const back4appApi = () => {
         getCloudItems,
         getCloudItemById,
         editCloudItem,
-        updateItem
+        updateItem,
+        addItemBuyer
     };
 
 };

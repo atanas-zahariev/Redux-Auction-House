@@ -4,7 +4,7 @@ import { getUser, validator } from '../services/utility';
 
 import { back4appApi } from '../services/back4Dataservice';
 
-const { parseLogout, parseLogin, parseRegister } = back4appApi();
+const { cloudLogin,cloudRegister,cloudLogout } = back4appApi();
 
 
 const userAdapter = createEntityAdapter();
@@ -15,7 +15,7 @@ export const loginUser = createAsyncThunk(
 
         try {
             validator(data);
-            const result = await parseLogin(data.username, data.password);
+            const result = await cloudLogin(data);
             return result;
         } catch (error) {
 
@@ -29,7 +29,7 @@ export const registerUser = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             validator(data);
-            const result = await parseRegister(data.username, data.password, data.email, data.repass);
+            const result = await cloudRegister(data);
             return result;
         } catch (error) {
 
@@ -41,7 +41,7 @@ export const registerUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     'user/logout',
     async (id) => {
-        await parseLogout();
+        await cloudLogout();
         return id;
     }
 );

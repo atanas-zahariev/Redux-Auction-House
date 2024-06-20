@@ -7,9 +7,9 @@ import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
-const { offer, getTotalAction, getUserAction, onDelete, } = api();
+const { getTotalAction, getUserAction, onDelete } = api();
 
-const { getCloudItems, saveItem, updateItem, addItemBuyer } = back4appApi();
+const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -73,9 +73,11 @@ export const closeItemOffer = createAsyncThunk(
 
     async (id, { rejectWithValue }) => {
         try {
-            await getUserAction(id);
+            const result = await closeOffer(id);
+            console.log(result)
             return id;
         } catch (error) {
+            console.log(error)
             return rejectWithValue(error);
         }
     }
@@ -140,10 +142,7 @@ const itemsSlice = createSlice({
         builder
             .addCase(getItems.fulfilled, (state, action) => {
                 state.status = 'fetchItemsSucceeded';
-                // itemsAdapter.addMany(state, action.payload.items.map(item => {
-                //     item.type = 'item';
-                //     return makeCorrectIdForRedux(item);
-                // }));
+
                 itemsAdapter.addMany(state, action.payload.items);
 
                 if (action.payload.user) {
@@ -160,7 +159,7 @@ const itemsSlice = createSlice({
 
                 const { data, id } = action.payload;
 
-                itemsAdapter.updateOne(state, { id: id, changes: { price: data.price } });
+                itemsAdapter.updateOne(state, { id: id, changes: { price: data.price, buyer: { id: state.user.id, username: state.user.username } } });
             })
             .addCase(makeOffer.rejected, (state, action) => {
                 state.status = 'offerFaild';
@@ -183,7 +182,11 @@ const itemsSlice = createSlice({
                 state.status = 'closeItemOfferSucceeded';
 
                 const item = state.entities[action.payload];
-                state.closedOffers.push(item);
+                if(state.closedOffers === null){
+                    state.closedOffers = [item]
+                }else{
+                    state.closedOffers.push(item)
+                }
                 itemsAdapter.removeOne(state, action.payload);
             })
             .addCase(closeItemOffer.rejected, (state, action) => {

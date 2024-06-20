@@ -1,5 +1,5 @@
 export default function FinishedOffers({
-    bider,
+    buyer,
     title,
     imgUrl,
     price
@@ -20,7 +20,7 @@ export default function FinishedOffers({
 
                 <footer className="align-center pad-med">
                     <p>Closing price: <strong>${price}</strong></p>
-                    from {bider?.firstname} {bider?.lastname}
+                    from {buyer?.username} 
                 </footer>
             </li>
         

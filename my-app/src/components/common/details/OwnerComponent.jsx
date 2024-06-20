@@ -13,7 +13,7 @@ export default function Owner({ item, user }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { title, imgUrl, category, description, price, bider, id } = item;
+    const { title, imgUrl, category, description, price, buyer, id } = item;
 
     const itemsError = useSelector(selectItemsError);
     const authError = useSelector(selectAuthError);
@@ -33,7 +33,9 @@ export default function Owner({ item, user }) {
 
     const onSubmit = async () => {
         const result = await dispatch(closeItemOffer(id));
+        console.log(result);
         if (result.error) {
+            console.log(result.error)
             return;
         }
         navigate('/closed');
@@ -86,9 +88,9 @@ export default function Owner({ item, user }) {
                             </div>
 
                             <div>
-                                {bider ?
+                                {buyer ?
                                     <div>
-                                        Bid by <strong>{bider.firstname} {bider.lastname}</strong>
+                                        Bid by <strong>{buyer.username} </strong>
                                         <Link onClick={onSubmit} className="action pad-med cta">Close Auction</Link>
                                     </div> :
                                     <div>
@@ -101,7 +103,7 @@ export default function Owner({ item, user }) {
                 </div>
 
                 <footer>
-                    <div>Listed by {user.username ? user.username : user.firstname} </div>
+                    <div>Listed by {user.username} </div>
                 </footer>
             </div>
 

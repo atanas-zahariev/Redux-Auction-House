@@ -14,7 +14,6 @@ export default function NotOwner({ item, user }) {
 
     const itemsError = useSelector(selectItemsError);
     const authError = useSelector(selectAuthError);
-    console.log(user);
     // const notices = useSelector(state => selectNotices(state));
 
     // const userNotices = notices.filter(notice => notice.fromUser._id === user.id);
@@ -35,18 +34,18 @@ export default function NotOwner({ item, user }) {
 
 
 
-    const { title, imgUrl, category, description, price, bider, id } = item;
+    const { title, imgUrl, category, description, price, buyer, id } = item;
 
     const currentUser = user?.id;
 
-    const isBider = bider?._id === currentUser;
+    const isBuyer = buyer?.id === currentUser;
 
-
+    console.log(isBuyer)
     // function sendComment() {
     //     dispatch(setErrorToCatalog(['Comment', item, user]));
     // }
 
-    const setBider = async (data) => {
+    const setBuyer = async (data) => {
         data.oldPrice = price;
         data.price = Number(data.price);
 
@@ -61,7 +60,7 @@ export default function NotOwner({ item, user }) {
         }
     };
 
-    const onSubmit = formHandller(setBider);
+    const onSubmit = formHandller(setBuyer);
 
     return (
         <section id="catalog-section">
@@ -92,9 +91,9 @@ export default function NotOwner({ item, user }) {
 
                             {currentUser ?
                                 <div>
-                                    {isBider ?
+                                    {isBuyer ?
                                         <div>
-                                            You are currently the <strong>highest bidder</strong> for this auction
+                                            You are currently the <strong>highest buyer</strong> for this auction
                                         </div> :
                                         <form className="vertical" onSubmit={onSubmit}>
                                             <label><span>Bid amount</span><input type="number" name="price" /></label>

@@ -69,7 +69,7 @@ export default function Edit() {
                             <label>
                                 <span>Starting price</span>
                                 <input type="number" name="price"
-                                    disabled={(item.bider) ? 'disabled' : ''}
+                                    disabled={(item.buyer) ? 'disabled' : ''}
                                     defaultValue={item.price}
                                 />
                             </label>

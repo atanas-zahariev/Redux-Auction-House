@@ -1,4 +1,3 @@
-import { back4AppRequest } from '../hooks/back4appApi';
 import { clearUser, setUser, getUser } from './utility';
 import Parse from 'parse/dist/parse.min.js';
 
@@ -8,155 +7,79 @@ Parse.serverURL = 'https://parseapi.back4app.com/';
 
 
 export const back4appApi = () => {
-    const { get, post, put, del } = back4AppRequest();
-
-    const endpoints = {
-        login: '/login',
-        register: '/users',
-        logout: '/logout',
-        getItems: '/classes/Item',
-        getSpecificDataWithId: '/classes/Item/',
-        createItem: '/classes/Item',
-        edit: '/classes/Item/',
-        delete: '/house/delete/',
-        closed: '/house/closed',
-        action: '/house/userAction/',
-        createNot: '/notification/createNotice',
-        getAllNotices: '/notification/notices',
-        getNotice: '/notification/notice/',
-        noticeAnswer: '/notification/answer',
-        deleteNotice: '/notification/notice/',
-        editNotice: '/notification/editNotice/',
-    };
-
-    async function login(data) {
-        const result = await post(endpoints.login, data);
-        // setUser(result);
-        return result;
-    }
-
-
-    async function register(data) {
-        const result = await post(endpoints.login, data);
-        setUser(result);
-        return result;
-    }
-
-    async function logout() {
-        const result = post(endpoints.logout, {});
-        clearUser();
-        return result;
-    }
-
-    async function createItem(data) {
-        const result = await post(endpoints.createItem, data);
-        return result;
-    }
-
-    async function getItems() {
-        const response = await get(endpoints.getItems);
-        return response.results;
-    }
-
-    async function getItemById(id) {
-        const result = await get(endpoints.getSpecificDataWithId + id);
-        return result;
-    }
-
-    async function editItem(data, id) {
-        // const user = getUser().objectId;
-        // console.log(user);
-        const result = await put(endpoints.edit + id, data);
-        return result;
-    }
-
-    // with parse -->
-
-    async function saveNewPerson(name, age, pointerId,) {
-        const User = Parse.Object.extend('_User');
-        const pointer = User.createWithoutData(pointerId);
-
-        const Person = Parse.Object.extend('Person');
-        const person = new Person();
-
-        person.set('name', name);
-        person.set('age', age);
-        person.set('pointer', pointer);
-        person.set('userArr', [pointerId]);
-
-        const personACL = new Parse.ACL();
-
-        personACL.setPublicReadAccess(true);
-        personACL.setWriteAccess(Parse.User.current().id, true);
-
-        person.setACL(personACL);
-
-        try {
-            const result = await person.save();
-            return result;
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-
-    async function retrievePerson(id) {
-        const query = new Parse.Query('Person');
-
-        try {
-            const person = await query.get(id);
-
-            return person.attributes;
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-
-    async function updatePerson(id, name) {
-        const query = new Parse.Query('Person');
-        try {
-            const person = await query.get(id);
-            person.set('name', name);
-            await person.save();
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
 
     async function updateItem(data, id) {
-        console.log(data);
         const query = new Parse.Query('Item');
+
         try {
             const item = await query.get(id);
+
             item.set(data);
+
             await item.save();
+
         } catch (error) {
+            console.log(error)
             throw error.message;
         }
     }
 
-    async function addBuyer(id) {
-        const pointerId = currentUser().id;
-        const User = Parse.Object.extend('_User');
-        const userPointer = User.createWithoutData(pointerId);
+    async function closeOffer(id) {
+        console.log('close')
+        const sessionToken = getUser().sessionToken;
+        const query = new Parse.Query('Item');
 
-        const query = new Parse.Query('Person');
         try {
-            const person = await query.get(id);
-            person.set('buyer', userPointer);
-            return await person.save();
+            const item = await query.get(id)
+
+            item.set('isClosed', true)
+
+            await item.save(null, { sessionToken })
+
         } catch (error) {
             throw error.message;
         }
     }
 
     async function addItemBuyer(data, itemId) {
+        const currentUser = getUser();
+        data.user = currentUser;
         data.id = itemId;
         try {
             await Parse.Cloud.run('check', data);
 
             await Parse.Cloud.run('addBuyer', data);
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+    async function saveItem(params) {
+        const currentUser = getUser();
+
+        params.user = currentUser;
+
+        try {
+            await Parse.Cloud.run('check', params);
+
+            const result = await Parse.Cloud.run('saveItem', params);
+
+            const itemId = result.id;
+
+            const { title, category, imgUrl, owner, price } = result.attributes;
+
+            const itemOwner = owner.id;
+
+            return { id: itemId, title, category, imgUrl, owner: itemOwner, price };
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+    async function getCloudItems() {
+        try {
+            const result = await Parse.Cloud.run('getItems');
+            return result;
         } catch (error) {
             throw error.message;
         }
@@ -192,41 +115,6 @@ export const back4appApi = () => {
 
 
     /// Query -->
-
-    async function equalTo() {
-        const Person = Parse.Object.extend('Person');
-        const query = new Parse.Query(Person);
-        query.equalTo('name', 'thirdRecord');
-        try {
-            const result = await query.find();
-            console.log(result[0].attributes);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-
-    async function notEqualTo(name, age) {
-        const query = new Parse.Query('Person');
-        query.notEqualTo('name', name);
-        query.greaterThan('age', age);
-        try {
-            const result = await query.find();
-            console.log(result);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function queryFirst() {
-        const query = new Parse.Query('Person');
-        try {
-            const result = await query.first();
-            return result;
-        } catch (error) {
-            throw error.message;
-        }
-    }
 
     async function matchesKeyInQuery() {
         const User = Parse.Object.extend('_User');
@@ -276,65 +164,46 @@ export const back4appApi = () => {
 
     // login register logout with parse
 
-    async function parseRegister(username, password, email, repass) {
-        const user = new Parse.User();
 
-        user.set({
-            username,
-            password,
-            email
-        });
-
-
+    async function cloudRegister(data) {
         try {
-            await Parse.Cloud.run('check', { username, password, email, repass });
+            await Parse.Cloud.run('check', data);
 
-            const result = await user.signUp();
-            const userId = result.id;
+            const result = await Parse.Cloud.run('register', data);
 
-            return {
-                id: userId,
-                username
-            };
-        } catch (error) {
-            throw error.message;
-        }
-    }
+            setUser(result)
 
-    async function parseLogin(username, password) {
-        // const user = new Parse.User();
-
-        try {
-            await Parse.Cloud.run('check', { username, password });
-
-            const user = await Parse.User.logIn(username, password);
-            const userId = user.id;
-
-            return {
-                id: userId,
-                username
-            };
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-    async function parseLogout() {
-        try {
-            const result = await Parse.User.logOut();
             return result;
         } catch (error) {
             throw error.message;
         }
     }
 
-    function currentUser() {
-        const currentUser = Parse.User.current();
-        if (currentUser) {
 
-            return currentUser;
-        } else {
-            return currentUser;
+
+    async function cloudLogin(data) {
+        try {
+            await Parse.Cloud.run('check', data);
+
+            const result = await Parse.Cloud.run('login', data)
+
+            setUser(result)
+
+            return result;
+        } catch (error) {
+            throw error.message;
+        }
+    }
+
+
+    async function cloudLogout() {
+        const params = getUser();
+        try {
+            const result = await Parse.Cloud.run('logout', params);
+            clearUser();
+            return result;
+        } catch (error) {
+            throw error.message;
         }
     }
 
@@ -377,84 +246,23 @@ export const back4appApi = () => {
     }
 
 
-    async function saveItem(params) {
-        try {
-            await Parse.Cloud.run('check', params);
-
-            const result = await Parse.Cloud.run('saveItem', params);
-            const itemId = result.id;
-            const { title, category, imgUrl, owner, price } = result.attributes;
-            const itemOwner = owner.id;
-            return { id: itemId, title, category, imgUrl, owner: itemOwner, price };
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-
-    async function getCloudItems() {
-        try {
-            const result = await Parse.Cloud.run('getItems');
-            return result;
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-    async function getCloudItemById(id) {
-        try {
-            const result = await Parse.Cloud.run('getItemById', { id });
-            return result;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function editCloudItem(data) {
-        try {
-            await Parse.Cloud.run('check', data);
-
-            const result = await Parse.Cloud.run('editItem', data);
-            return result;
-        } catch (error) {
-            throw error.message;
-        }
-    }
-
-
     return {
-        register,
-        login,
-        logout,
-        createItem,
-        getItems,
-        getItemById,
-        editItem,
-        saveNewPerson,
-        retrievePerson,
         deletePerson,
-        updatePerson,
         removeField,
-        equalTo,
-        notEqualTo,
-        addBuyer,
-        queryFirst,
         matchesKeyInQuery,
         matchesKeyInQueryBack,
         selectQuery,
-        parseRegister,
-        parseLogin,
-        parseLogout,
-        currentUser,
+        cloudRegister,
+        cloudLogin,
+        cloudLogout,
         createRole,
         retrieveRole,
         getShema,
         saveItem,
         getCloudItems,
-        getCloudItemById,
-        editCloudItem,
         updateItem,
-        addItemBuyer
+        addItemBuyer,
+        closeOffer
     };
 
 };

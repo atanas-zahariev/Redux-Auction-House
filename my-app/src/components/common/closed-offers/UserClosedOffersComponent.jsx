@@ -6,13 +6,14 @@ import FinishedOffers from './FinishedOffersComponent';
 
 import { cleanAuthError, selectAuthError } from '../../../slices/authSlice';
 import { cleanErrorFromCatalog, getClosedUserItems, selectClosedOffers, selectItemsError } from '../../../slices/itemsSlice';
+import Spinner from '../Spinner';
 
 
 export default function UserClosedOffers() {
     const authError = useSelector(selectAuthError);
     const itemsError = useSelector(selectItemsError);
     const offers = useSelector( selectClosedOffers);
-
+    console.log(offers)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -26,6 +27,12 @@ export default function UserClosedOffers() {
         }
         // eslint-disable-next-line
     }, []);
+
+    if(!offers){
+        return (
+            <Spinner />
+        );
+    }
 
     return (
         <section id="catalog-section" className="spaced">

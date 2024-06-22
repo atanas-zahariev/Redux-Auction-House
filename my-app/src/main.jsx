@@ -28,6 +28,7 @@ Parse.serverURL = 'https://parseapi.back4app.com/';
 //  });
 
 window.api = back4appApi();
+
 async function fetchItemBeforeRender() {
 
   await store.dispatch(getItems());

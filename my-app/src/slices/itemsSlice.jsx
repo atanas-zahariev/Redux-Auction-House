@@ -1,15 +1,12 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 
-import { makeCorrectIdForRedux, validator, getUser } from '../services/utility';
+import { validator, getUser } from '../services/utility';
 
-import { api } from '../services/dataService';
 import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
-const {  onDelete } = api();
-
-const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer,getUserClosedOffers,deleteItemFDB } = back4appApi();
+const { getCloudItems, saveItem, updateItem, addItemBuyer, closeOffer, getUserClosedOffers, deleteItemFDB } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -22,7 +19,6 @@ export const getItems = createAsyncThunk(
         }
     }
 );
-
 
 
 export const createItem = createAsyncThunk(
@@ -44,8 +40,11 @@ export const editItem = createAsyncThunk(
         console.log('editItemSlice');
         try {
             validator(data);
+
             await updateItem(data, id);
+
             data.id = id;
+
             return { ...data };
         } catch (error) {
             return rejectWithValue(error);
@@ -60,7 +59,6 @@ export const deleteItem = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             await deleteItemFDB(id);
-
             return id;
         } catch (error) {
             return rejectWithValue(error);
@@ -73,11 +71,9 @@ export const closeItemOffer = createAsyncThunk(
 
     async (id, { rejectWithValue }) => {
         try {
-            const result = await closeOffer(id);
-            console.log(result)
+            await closeOffer(id);
             return id;
         } catch (error) {
-            console.log(error)
             return rejectWithValue(error);
         }
     }
@@ -159,7 +155,13 @@ const itemsSlice = createSlice({
 
                 const { data, id } = action.payload;
 
-                itemsAdapter.updateOne(state, { id: id, changes: { price: data.price, buyer: { id: state.user.id, username: state.user.username } } });
+                itemsAdapter.updateOne(state, {
+                    id: id,
+                    changes: {
+                        price: data.price,
+                        buyer: { id: state.user.id, username: state.user.username }
+                    }
+                });
             })
             .addCase(makeOffer.rejected, (state, action) => {
                 state.status = 'offerFaild';
@@ -180,9 +182,9 @@ const itemsSlice = createSlice({
                 state.status = 'closeItemOfferSucceeded';
 
                 const item = state.entities[action.payload];
-                if(state.closedOffers === null){
+                if (state.closedOffers === null) {
                     state.closedOffers = [item]
-                }else{
+                } else {
                     state.closedOffers.push(item)
                 }
                 itemsAdapter.removeOne(state, action.payload);

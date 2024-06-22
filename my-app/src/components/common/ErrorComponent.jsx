@@ -15,13 +15,14 @@ import { setNotification } from '../../slices/notificationsSlice';
 export default function Error({ error }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    console.log(error);
     useEffect(() => {
         // In case someone manipulates localStorage to make a request with a fake token.
-        if (error[0] === 'Invalid authorization token') {
+        if ( error === 'Invalid session token'|| error === 'Object not found.') {
             clearUser();
             dispatch(setPersistedStateToNull());
             dispatch(getItems());
+            navigate('/catalog')
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -127,20 +127,6 @@ export const back4appApi = () => {
     }
 
 
-    async function deletePerson(id) {
-        const query = new Parse.Query('Person');
-
-        try {
-            const person = await query.get(id);
-
-            await person.destroy();
-        } catch (error) {
-            throw error.message;
-
-        }
-    }
-
-
     /// Query -->
 
     async function matchesKeyInQuery() {
@@ -234,6 +220,8 @@ export const back4appApi = () => {
         }
     }
 
+    // Role Schema
+
     async function createRole(userId) {
         const usersToAddToRole = new Parse.Query('_User');
         const user = await usersToAddToRole.get(userId);
@@ -274,7 +262,6 @@ export const back4appApi = () => {
 
 
     return {
-        deletePerson,
         removeField,
         matchesKeyInQuery,
         matchesKeyInQueryBack,

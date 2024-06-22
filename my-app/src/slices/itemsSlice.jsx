@@ -37,7 +37,7 @@ export const createItem = createAsyncThunk(
 export const editItem = createAsyncThunk(
     'items/editItem',
     async ({ data, id }, { rejectWithValue }) => {
-        console.log('editItemSlice');
+        
         try {
             validator(data);
 

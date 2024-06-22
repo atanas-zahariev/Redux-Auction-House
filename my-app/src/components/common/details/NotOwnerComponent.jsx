@@ -40,7 +40,6 @@ export default function NotOwner({ item, user }) {
 
     const isBuyer = buyer?.id === currentUser;
 
-    console.log(isBuyer)
     // function sendComment() {
     //     dispatch(setErrorToCatalog(['Comment', item, user]));
     // }

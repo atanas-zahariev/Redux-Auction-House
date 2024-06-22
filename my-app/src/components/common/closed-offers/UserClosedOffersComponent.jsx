@@ -13,7 +13,7 @@ export default function UserClosedOffers() {
     const authError = useSelector(selectAuthError);
     const itemsError = useSelector(selectItemsError);
     const offers = useSelector( selectClosedOffers);
-    console.log(offers)
+    
     const dispatch = useDispatch();
 
     useEffect(() => {

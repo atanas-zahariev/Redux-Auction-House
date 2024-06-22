@@ -9,7 +9,7 @@ const itemsAdapter = createEntityAdapter();
 
 const {  onDelete } = api();
 
-const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer,getUserClosedOffers } = back4appApi();
+const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer,getUserClosedOffers,deleteItemFDB } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -59,7 +59,7 @@ export const deleteItem = createAsyncThunk(
 
     async (id, { rejectWithValue }) => {
         try {
-            await onDelete(id);
+            await deleteItemFDB(id);
 
             return id;
         } catch (error) {

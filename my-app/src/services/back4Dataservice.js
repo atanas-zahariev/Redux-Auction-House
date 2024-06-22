@@ -9,6 +9,8 @@ Parse.serverURL = 'https://parseapi.back4app.com/';
 export const back4appApi = () => {
 
     async function updateItem(data, id) {
+        const sessionToken = getUser().sessionToken;
+
         const query = new Parse.Query('Item');
 
         try {
@@ -16,7 +18,7 @@ export const back4appApi = () => {
 
             item.set(data);
 
-            await item.save();
+            await item.save(null, { sessionToken });
 
         } catch (error) {
             console.log(error)
@@ -93,6 +95,20 @@ export const back4appApi = () => {
             return result;
         } catch (error) {
             throw error;
+        }
+    }
+
+    async function deleteItemFDB(id){
+        const sessionToken = getUser().sessionToken;
+
+        const query = new Parse.Query('Item');
+
+        try {
+            const item = await query.get(id);
+
+            await item.destroy( {sessionToken})
+        } catch (error) {
+            throw error.message;
         }
     }
 
@@ -274,7 +290,8 @@ export const back4appApi = () => {
         updateItem,
         addItemBuyer,
         closeOffer,
-        getUserClosedOffers
+        getUserClosedOffers,
+        deleteItemFDB
     };
 
 };

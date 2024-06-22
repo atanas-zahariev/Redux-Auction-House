@@ -7,9 +7,9 @@ import { back4appApi } from '../services/back4Dataservice';
 
 const itemsAdapter = createEntityAdapter();
 
-const { getTotalAction, getUserAction, onDelete } = api();
+const {  onDelete } = api();
 
-const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer } = back4appApi();
+const { getCloudItems, saveItem, updateItem, addItemBuyer,closeOffer,getUserClosedOffers } = back4appApi();
 
 export const getItems = createAsyncThunk(
     'items/fetchItems',
@@ -87,7 +87,7 @@ export const getClosedUserItems = createAsyncThunk(
     'items/fetchClosedUserItems',
     async (_, { rejectWithValue }) => {
         try {
-            const result = await getTotalAction();
+            const result = await getUserClosedOffers();
             return result;
         } catch (error) {
             return rejectWithValue(error);
@@ -168,10 +168,8 @@ const itemsSlice = createSlice({
             })
             .addCase(getClosedUserItems.fulfilled, (state, action) => {
                 state.status = 'fetchUserClosedOffers';
-                state.closedOffers = action.payload.items.map(item => {
-                    item.type = 'item';
-                    return makeCorrectIdForRedux(item);
-                });
+
+                state.closedOffers = action.payload.items;
             })
             .addCase(getClosedUserItems.rejected, (state, action) => {
                 state.status = 'fetchUserClosedOffersFaild';

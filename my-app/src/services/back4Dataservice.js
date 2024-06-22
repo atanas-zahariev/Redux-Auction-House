@@ -25,8 +25,8 @@ export const back4appApi = () => {
     }
 
     async function closeOffer(id) {
-        console.log('close')
         const sessionToken = getUser().sessionToken;
+
         const query = new Parse.Query('Item');
 
         try {
@@ -85,9 +85,20 @@ export const back4appApi = () => {
         }
     }
 
+    async function getUserClosedOffers(){
+        const user = getUser();
+
+        try {
+            const result = await Parse.Cloud.run('getUserClosedOffers', user)
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
 
+  // Person 
     async function removeField(id, field) {
         const query = new Parse.Query('Person');
         try {
@@ -262,7 +273,8 @@ export const back4appApi = () => {
         getCloudItems,
         updateItem,
         addItemBuyer,
-        closeOffer
+        closeOffer,
+        getUserClosedOffers
     };
 
 };

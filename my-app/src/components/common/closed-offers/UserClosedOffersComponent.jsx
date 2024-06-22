@@ -16,7 +16,7 @@ export default function UserClosedOffers() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // dispatch(getClosedUserItems());
+        dispatch(getClosedUserItems());
         
         if (authError) {
             dispatch(cleanAuthError());
